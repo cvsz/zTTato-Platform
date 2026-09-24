@@ -7,17 +7,17 @@ import uuid
 from pathlib import Path
 from urllib.parse import urlencode
 
-from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from sqlalchemy import select, text
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.config import Settings, load_settings
-from app.db import BrowserSession, LinkedAccount, MediaAsset, OAuthRequest, PublishJob, make_session_factory
+from app.db import BrowserSession, LinkedAccount, MediaAsset, OAuthRequest, PublishJob, MIGRATION_HEAD, make_session_factory
 from app.security import TokenCipher, browser_session, digest, new_browser_session, require_csrf
 from app.tiktok import TikTokClient
 
@@ -49,7 +49,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     Path(s.media_dir).mkdir(parents=True, exist_ok=True)
     if s.database_url.startswith("sqlite:///"):
         Path(s.database_url.removeprefix("sqlite:///")).parent.mkdir(parents=True, exist_ok=True)
-    engine, session_factory = make_session_factory(s.database_url)
+    engine, session_factory = make_session_factory(s.database_url, bootstrap=s.env != "production")
     cipher = TokenCipher(s.encryption_key)
     app.state.tiktok = TikTokClient(s)
     app.state.settings = s
@@ -146,7 +146,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/health/ready")
     def ready(session: Session = Depends(db)):
-        session.execute(text("SELECT 1"))
+        try:
+            session.execute(text("SELECT 1"))
+            if s.env == "production":
+                revision = session.scalar(text("SELECT version_num FROM alembic_version"))
+                if revision != MIGRATION_HEAD:
+                    raise HTTPException(503, "Database migration is not current")
+        except SQLAlchemyError as exc:
+            raise HTTPException(503, "Database is unavailable or migrations are missing") from exc
         return {"status": "ready"}
 
     @app.get("/api/session")

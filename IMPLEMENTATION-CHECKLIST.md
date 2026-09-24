@@ -11,7 +11,7 @@
 - [x] Restrict TikTok upload destination to open-upload.tiktokapis.com.
 - [x] Provide public Privacy Policy, Terms and review walkthrough.
 - [x] Add Docker, Compose, unit tests, linting and container health CI.
-- [ ] Replace create_all with versioned DB migrations before production schema evolution.
+- [x] Initial Alembic migration added; production create_all disabled. Real PostgreSQL upgrade, isolated restore and rollback evidence remain open.
 - [ ] Configure main branch ruleset, required checks and review.
 - [ ] Rotate potentially exposed TikTok secret and verify secret scanning.
 - [ ] Verify production HTTPS/Cloudflare behavior from an external client.

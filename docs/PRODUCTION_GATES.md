@@ -19,7 +19,8 @@ Production-ready is an evidence claim, not a branch name.
 - [ ] No credentials are present in repository history or artifacts.
 
 ## P1
-- [ ] Schema migrations replace automatic create_all for production changes.
+- [x] Add initial versioned Alembic migration and disable automatic create_all in production (still needs live Postgres rehearsal).
+- [ ] Isolated PostgreSQL migration and restore have been executed and timestamped.
 - [ ] Scheduled cleanup removes expired browser/OAuth records and expired media.
 - [ ] Content Posting webhooks are validated and authenticated where adopted.
 - [ ] SBOM, container vulnerability scan and provenance evidence are produced for releases.

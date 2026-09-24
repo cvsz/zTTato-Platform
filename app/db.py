@@ -3,6 +3,8 @@ import time
 from sqlalchemy import ForeignKey, Integer, String, Text, UniqueConstraint, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
+MIGRATION_HEAD = "20260924_01"
+
 
 class Base(DeclarativeBase):
     pass
@@ -60,8 +62,9 @@ class PublishJob(Base):
     __table_args__ = (UniqueConstraint("session_id", "idempotency_key", name="uq_publish_once"),)
 
 
-def make_session_factory(database_url: str):
+def make_session_factory(database_url: str, *, bootstrap: bool = True):
     connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
     engine = create_engine(database_url, pool_pre_ping=True, connect_args=connect_args)
-    Base.metadata.create_all(engine)
+    if bootstrap:
+        Base.metadata.create_all(engine)  # Local development and isolated tests only.
     return engine, sessionmaker(bind=engine, expire_on_commit=False)

@@ -5,6 +5,8 @@ RUN groupadd -r zttato && useradd -r -g zttato -d /srv zttato && mkdir -p /srv/d
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=zttato:zttato app/ ./app/
+COPY --chown=zttato:zttato migrations/ ./migrations/
+COPY --chown=zttato:zttato alembic.ini ./alembic.ini
 COPY --chown=zttato:zttato web/ ./web/
 USER zttato
 EXPOSE 8000
