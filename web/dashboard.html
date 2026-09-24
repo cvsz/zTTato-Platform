@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Creator Dashboard · zTTato</title><meta name="description" content="Authorize TikTok, prepare an MP4, and explicitly choose draft upload or direct post.">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/styles.css">
+<script src="/assets/dashboard.js" defer></script></head>
+<body><main class="shell dashboard">
+<header class="nav"><a class="brand" href="/"><img src="/assets/icon.svg" alt="">zTTato Creator</a>
+<nav><a href="/">Home</a><a href="/review-preview">Review</a><a href="/privacy-policy">Privacy</a><a href="/terms-of-service">Terms</a></nav></header>
+<h1>Creator dashboard</h1>
+<p class="note">Nothing uploads or publishes without your explicit confirmation. Your TikTok password is entered only on TikTok's own authorization page.</p>
+<div class="panel">
+<h2>1 · TikTok connection</h2>
+<p id="connection" role="status">Loading your session…</p>
+<p id="connection-details" class="note"></p>
+<a id="connect" class="button primary hidden" href="/auth/tiktok/start">Continue with TikTok</a>
+<button id="disconnect" type="button" class="hidden">Disconnect TikTok</button>
+</div>
+<div id="editor" class="hidden">
+<div class="two-col">
+<section class="panel">
+<h2>2 · Prepare your video</h2>
+<label for="file">MP4 file (up to 64 MiB)</label>
+<input id="file" type="file" accept=".mp4,video/mp4" aria-describedby="file-help">
+<p id="file-help" class="note">Only MP4 files are supported in this version. Never upload sensitive content.</p>
+<button id="upload" type="button" disabled>Upload to zTTato workspace</button>
+<p id="media-result" role="status" class="note"></p>
+<label for="caption">Caption (maximum 2,200 characters)</label>
+<textarea id="caption" maxlength="2200" placeholder="Write your caption here"></textarea>
+<fieldset><legend>Publishing method</legend>
+<label class="choice"><input type="radio" name="mode" id="mode-draft" value="draft" checked>Upload as Draft · you finish the post in TikTok</label>
+<label class="choice"><input type="radio" name="mode" id="mode-direct" value="direct">Direct Post · send directly after confirmation</label>
+</fieldset>
+<div id="direct-options" class="hidden">
+<label for="privacy">TikTok visibility (current account choices)</label>
+<select id="privacy" disabled><option value="">Querying TikTok…</option></select>
+<p id="creator-message" class="note"></p>
+<fieldset><legend>Creator interaction settings</legend>
+<label class="choice"><input type="checkbox" id="disable-comment">Disable comments</label>
+<label class="choice"><input type="checkbox" id="disable-duet">Disable Duet</label>
+<label class="choice"><input type="checkbox" id="disable-stitch">Disable Stitch</label>
+</fieldset>
+<fieldset><legend>Content disclosure</legend>
+<label class="choice"><input type="checkbox" id="own-brand">This video promotes my own business</label>
+<label class="choice"><input type="checkbox" id="paid-brand">This video is a paid partnership</label>
+<label class="choice"><input type="checkbox" id="ai-content">This video contains AI-generated content</label>
+</fieldset>
+</div>
+</section>
+<section class="panel">
+<h2>3 · Review and confirm</h2>
+<p id="summary" class="note">Choose a video and a publishing method first.</p>
+<label class="choice"><input type="checkbox" id="consent">I reviewed the selected content, privacy setting and disclosures. I expressly consent to sending this video to TikTok.</label>
+<button class="primary" id="publish" type="button" disabled>Send to TikTok</button>
+<p class="note">Draft: finish posting from TikTok inbox. Direct: TikTok processes the post and applies account/API restrictions.</p>
+<div id="status" class="status" role="status" aria-live="polite">No content sent.</div>
+<button id="refresh-status" type="button" disabled>Refresh TikTok status</button>
+</section>
+</div>
+<div class="panel"><h2>Account controls</h2>
+<button id="delete-data" type="button">Delete zTTato account data</button>
+<p class="note">Disconnect revokes TikTok authorization. Delete removes local tokens and uploaded files. If TikTok revocation is unavailable, also revoke zTTato in your TikTok account settings.</p>
+</div>
+</div>
+<footer>zTTato Creator · <a href="/privacy-policy">Privacy Policy</a> · <a href="/terms-of-service">Terms of Service</a></footer>
+</main></body></html>

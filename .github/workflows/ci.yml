@@ -1,0 +1,48 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.12','3.13']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: python -m compileall -q app
+      - run: ruff check app tests
+      - run: ruff format --check app tests
+      - run: pytest
+      - run: pip check
+  repository-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Required files and no tracked secret files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in README.md SECURITY.md AGENTS.md Dockerfile compose.yaml .env.example docs/TIKTOK_REVIEW.md docs/PRODUCTION_GATES.md; do test -f "$path"; done
+          ! git ls-files | grep -E '(^|/)(\.env|id_rsa|id_ed25519|.*\.pem|.*\.key)$' | grep -v '^\.env\.example$'
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t zttato:ci .
+      - run: docker run --rm -d --name zttato-ci -p 18000:8000 zttato:ci
+      - run: |
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18000/health/live && exit 0; sleep 1; done
+          docker logs zttato-ci
+          exit 1
