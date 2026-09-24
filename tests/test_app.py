@@ -1,3 +1,4 @@
+from dataclasses import replace
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -52,3 +53,9 @@ def test_oauth_start_fails_closed_without_real_client_key(tmp_path):
 def test_readiness_uses_database(tmp_path):
     client = TestClient(create_app(settings(tmp_path)))
     assert client.get("/health/ready").json() == {"status": "ready"}
+
+
+def test_production_readiness_fails_without_migration(tmp_path):
+    app = create_app(replace(settings(tmp_path), env="production"))
+    response = TestClient(app).get("/health/ready")
+    assert response.status_code == 503
