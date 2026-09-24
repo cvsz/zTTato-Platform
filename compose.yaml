@@ -1,0 +1,41 @@
+name: zttato
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: zttato
+      POSTGRES_USER: zttato
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U zttato -d zttato"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks: [internal]
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://zttato:${POSTGRES_PASSWORD}@db:5432/zttato
+      MEDIA_DIR: /srv/media
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - media_data:/srv/media
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    networks: [internal]
+networks:
+  internal:
+volumes:
+  postgres_data:
+  media_data:
