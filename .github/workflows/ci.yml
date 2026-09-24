@@ -24,7 +24,7 @@ jobs:
       - run: python -m compileall -q app
       - run: ruff check app tests
       - run: ruff format --check app tests
-      - run: pytest
+      - run: python -m pytest
       - run: pip check
   repository-baseline:
     runs-on: ubuntu-latest

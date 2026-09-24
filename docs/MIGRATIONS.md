@@ -16,4 +16,4 @@ Versioned schema migration is required for production. Database initialization b
 Schema downgrades are for isolated rehearsal only. Before production rollback, confirm old application schema compatibility, preserve a verified database backup, and use an operator-approved migration path. Never automatically downgrade a live database.
 
 ## CI
-`pytest tests/test_migrations.py` verifies fresh upgrade and downgrade on an isolated temporary SQLite database. PostgreSQL migration/restore must be independently rehearsed before the production gate is satisfied.
+`python -m pytest tests/test_migrations.py` verifies fresh upgrade and downgrade on an isolated temporary SQLite database. PostgreSQL migration/restore must be independently rehearsed before the production gate is satisfied.
