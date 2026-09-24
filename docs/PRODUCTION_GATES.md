@@ -26,3 +26,8 @@ Production-ready is an evidence claim, not a branch name.
 - [ ] Load/soak baseline is documented.
 
 Do not close these gates from documentation alone.
+
+## P0 implementation follow-up
+- [ ] Confirm CI runs on an assigned GitHub runner and passes. The earlier attempts had runner_id=0 and zero steps.
+- [ ] Verify the /dashboard flow with a real authorized TikTok Sandbox account, not only mocked API tests.
+- [ ] Verify brand disclosure and AI-generated labeling behavior against the approved TikTok client settings.

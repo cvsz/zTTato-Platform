@@ -36,6 +36,9 @@ class PublishInput(BaseModel):
     disable_comment: bool = False
     disable_duet: bool = False
     disable_stitch: bool = False
+    brand_content_toggle: bool = False
+    brand_organic_toggle: bool = False
+    is_aigc: bool = False
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -120,6 +123,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/", include_in_schema=False)
     def homepage():
         return FileResponse(WEB / "index.html")
+
+    @app.get("/dashboard", include_in_schema=False)
+    def dashboard():
+        return FileResponse(WEB / "dashboard.html")
 
     @app.get("/review-preview", include_in_schema=False)
     def review_preview():
@@ -226,7 +233,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         found.access_expires_at = now + int(tokens["expires_in"])
         found.refresh_expires_at = now + int(tokens["refresh_expires_in"])
         session.commit()
-        return RedirectResponse("/?connected=1", status_code=303)
+        return RedirectResponse("/dashboard?connected=1", status_code=303)
 
     @app.get("/api/creator-info")
     async def creator_info(
@@ -294,6 +301,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             PublishJob.session_id == row.id, PublishJob.idempotency_key == payload.idempotency_key
         ))
         if earlier:
+            if earlier.media_id != payload.media_id or earlier.mode != payload.mode:
+                raise HTTPException(409, "Idempotency key already belongs to a different request")
             return {"job_id": earlier.id, "status": earlier.status, "publish_id": earlier.publish_id,
                     "idempotent_replay": True}
         media = session.scalar(select(MediaAsset).where(
@@ -337,7 +346,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             publish_id, upload_url = await client.init_video(
                 token, mode=payload.mode, media_size=media.size, caption=payload.caption,
                 privacy=privacy, disable_comment=payload.disable_comment,
-                disable_duet=payload.disable_duet, disable_stitch=payload.disable_stitch
+                disable_duet=payload.disable_duet, disable_stitch=payload.disable_stitch,
+                brand_content_toggle=payload.brand_content_toggle,
+                brand_organic_toggle=payload.brand_organic_toggle, is_aigc=payload.is_aigc
             )
             job.publish_id = publish_id
             job.status = "TRANSFER_PENDING"

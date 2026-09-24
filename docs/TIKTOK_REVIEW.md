@@ -24,3 +24,6 @@ Never expose Client Secret, access tokens, refresh tokens, upload URLs or produc
 
 ## Current external constraints
 TikTok states that unaudited clients' Direct Post content is restricted to private viewing. Keep TIKTOK_APP_AUDITED=false until the client has actually passed the applicable audit. Do not describe the app as TikTok-approved before confirmation.
+
+## Real creator UI
+Use /dashboard to perform the actual authenticated flow. /review-preview remains a deliberately non-posting mockup. The dashboard queries creator choices and requires a separate explicit consent checkbox. For unaudited clients only SELF_ONLY is selectable. Review commercial disclosure and AI-generated content controls against latest TikTok UX requirements and evidence before resubmission.

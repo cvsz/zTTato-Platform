@@ -16,3 +16,5 @@ LOCAL SETUP:
 Register https://zttato.zeaz.dev/tiktok/callback as the exact Web Login Kit redirect URI, if not already present. Never silently change registered redirects.
 Review docs/TIKTOK_REVIEW.md, docs/OPERATIONS.md and docs/PRODUCTION_GATES.md.
 Share Kit is NOT included: this web app uses Login Kit and Content Posting API only. No scraping or password automation is used.
+
+CREATOR DASHBOARD: /dashboard provides real browser interactions for local MP4 upload, current TikTok visibility choices, commercial disclosure, consent, draft/direct requests, status polling and account controls. This page is not a substitute for real TikTok Sandbox E2E evidence.

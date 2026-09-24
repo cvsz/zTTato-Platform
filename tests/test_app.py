@@ -27,7 +27,7 @@ def settings(tmp_path: Path) -> Settings:
 
 def test_public_pages_and_headers(tmp_path):
     client = TestClient(create_app(settings(tmp_path)))
-    for path in ("/","/review-preview","/privacy-policy","/terms-of-service"):
+    for path in ("/","/dashboard","/review-preview","/privacy-policy","/terms-of-service"):
         response = client.get(path)
         assert response.status_code == 200
         assert response.headers["x-content-type-options"] == "nosniff"

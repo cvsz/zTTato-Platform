@@ -67,7 +67,9 @@ class TikTokClient:
     async def init_video(
         self, access_token: str, *, mode: str, media_size: int,
         caption: str, privacy: str | None, disable_comment: bool,
-        disable_duet: bool, disable_stitch: bool
+        disable_duet: bool, disable_stitch: bool,
+        brand_content_toggle: bool = False, brand_organic_toggle: bool = False,
+        is_aigc: bool = False
     ) -> tuple[str, str]:
         if mode == "direct":
             endpoint = "/v2/post/publish/video/init/"
@@ -75,6 +77,9 @@ class TikTokClient:
                 "title": caption, "privacy_level": privacy,
                 "disable_comment": disable_comment, "disable_duet": disable_duet,
                 "disable_stitch": disable_stitch,
+                "brand_content_toggle": brand_content_toggle,
+                "brand_organic_toggle": brand_organic_toggle,
+                "is_aigc": is_aigc,
             }
             request = {"post_info": post_info}
         elif mode == "draft":
@@ -117,7 +122,8 @@ class TikTokClient:
             ) as client:
                 result = await client.put(
                     url,
-                    headers={"Content-Type": "video/mp4", "Content-Range": f"bytes 0-{size - 1}/{size}"},
+                    headers={"Content-Type": "video/mp4", "Content-Length": str(size),
+                             "Content-Range": f"bytes 0-{size - 1}/{size}"},
                     content=content(),
                 )
                 result.raise_for_status()
