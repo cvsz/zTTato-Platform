@@ -22,7 +22,7 @@
 - [ ] Load/soak and failure-mode evidence
 
 ## Later
-- [ ] Alembic migrations
+- [x] Initial Alembic migrations (production PostgreSQL rehearsal remains an open gate)
 - [ ] Authenticated Content Posting webhooks
 - [ ] Background cleanup/retention jobs
 - [ ] Additional supported media types only after UX/API compliance review

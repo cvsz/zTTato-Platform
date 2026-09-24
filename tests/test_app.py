@@ -1,3 +1,4 @@
+from dataclasses import replace
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -15,7 +16,7 @@ def settings(tmp_path: Path) -> Settings:
         encryption_key="",
         client_key="REPLACE_TEST",
         client_secret="REPLACE_TEST",
-        scopes=("user.info.basic","video.upload","video.publish"),
+        scopes=("user.info.basic", "video.upload", "video.publish"),
         app_audited=False,
         legal_entity="Example Operator",
         legal_email="privacy@example.test",
@@ -27,7 +28,7 @@ def settings(tmp_path: Path) -> Settings:
 
 def test_public_pages_and_headers(tmp_path):
     client = TestClient(create_app(settings(tmp_path)))
-    for path in ("/","/dashboard","/review-preview","/privacy-policy","/terms-of-service"):
+    for path in ("/", "/dashboard", "/review-preview", "/privacy-policy", "/terms-of-service"):
         response = client.get(path)
         assert response.status_code == 200
         assert response.headers["x-content-type-options"] == "nosniff"
@@ -51,4 +52,10 @@ def test_oauth_start_fails_closed_without_real_client_key(tmp_path):
 
 def test_readiness_uses_database(tmp_path):
     client = TestClient(create_app(settings(tmp_path)))
-    assert client.get("/health/ready").json() == {"status":"ready"}
+    assert client.get("/health/ready").json() == {"status": "ready"}
+
+
+def test_production_readiness_fails_without_migration(tmp_path):
+    app = create_app(replace(settings(tmp_path), env="production"))
+    response = TestClient(app).get("/health/ready")
+    assert response.status_code == 503

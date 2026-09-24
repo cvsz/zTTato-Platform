@@ -24,7 +24,7 @@ jobs:
       - run: python -m compileall -q app
       - run: ruff check app tests
       - run: ruff format --check app tests
-      - run: pytest
+      - run: python -m pytest
       - run: pip check
   repository-baseline:
     runs-on: ubuntu-latest
@@ -46,3 +46,47 @@ jobs:
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18000/health/live && exit 0; sleep 1; done
           docker logs zttato-ci
           exit 1
+  postgres-schema:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: zttato
+          POSTGRES_USER: zttato
+          POSTGRES_PASSWORD: ${{ github.run_id }}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U zttato -d zttato"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Apply, verify, downgrade and reapply migration on isolated PostgreSQL
+        env:
+          DATABASE_URL: postgresql+psycopg://zttato:${{ github.run_id }}@localhost:5432/zttato
+        shell: bash
+        run: |
+          set -euo pipefail
+          alembic upgrade head
+          alembic current --check-heads
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine, inspect, text
+          from app.db import MIGRATION_HEAD
+          engine = create_engine(os.environ["DATABASE_URL"])
+          assert set(("browser_sessions", "oauth_requests", "linked_accounts",
+                      "media_assets", "publish_jobs")) <= set(inspect(engine).get_table_names())
+          with engine.connect() as db:
+              assert db.scalar(text("SELECT version_num FROM alembic_version")) == MIGRATION_HEAD
+          engine.dispose()
+          PY
+          alembic downgrade base
+          alembic upgrade head
+          alembic current --check-heads

@@ -19,7 +19,8 @@ Production-ready is an evidence claim, not a branch name.
 - [ ] No credentials are present in repository history or artifacts.
 
 ## P1
-- [ ] Schema migrations replace automatic create_all for production changes.
+- [x] Add initial versioned Alembic migration and disable automatic create_all in production (still needs live Postgres rehearsal).
+- [ ] Isolated PostgreSQL migration and restore have been executed and timestamped.
 - [ ] Scheduled cleanup removes expired browser/OAuth records and expired media.
 - [ ] Content Posting webhooks are validated and authenticated where adopted.
 - [ ] SBOM, container vulnerability scan and provenance evidence are produced for releases.
@@ -31,3 +32,8 @@ Do not close these gates from documentation alone.
 - [ ] Confirm CI runs on an assigned GitHub runner and passes. The earlier attempts had runner_id=0 and zero steps.
 - [ ] Verify the /dashboard flow with a real authorized TikTok Sandbox account, not only mocked API tests.
 - [ ] Verify brand disclosure and AI-generated labeling behavior against the approved TikTok client settings.
+
+## Automated migration acceptance
+- [x] CI job exercises Alembic upgrade, revision verification, downgrade and re-upgrade against disposable PostgreSQL 17 (evidence only after this PR's checks pass).
+- [x] Regression test asserts production readiness fails closed without the expected Alembic revision (evidence only after CI passes).
+- [ ] Production-like isolated PostgreSQL restore with representative encrypted tokens and known-good container rollback; no live database changes until this drill passes.

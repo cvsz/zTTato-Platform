@@ -6,6 +6,9 @@ Run behind an HTTPS reverse proxy/Cloudflare tunnel. The app listens on loopback
 ## Secrets
 Store TIKTOK_CLIENT_SECRET, APP_ENCRYPTION_KEY and POSTGRES_PASSWORD outside Git. Rotate credentials immediately if exposed in screenshots or logs. Token values and TikTok upload URLs must never be logged.
 
+## Schema migrations
+Run `docker compose run --rm migrate` before the first production app startup. See `docs/MIGRATIONS.md` for the existing-database compatibility gate.
+
 ## Backup
 Back up PostgreSQL with a consistent pg_dump and back up the token encryption key in a separate protected secret store. Media is operational/transient data and must follow an explicit retention policy.
 
