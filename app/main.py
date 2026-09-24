@@ -1,4 +1,5 @@
 """zTTato API. All TikTok secrets stay server-side; a browser session is not a TikTok access token."""
+
 import html
 import os
 import secrets
@@ -17,7 +18,15 @@ from sqlalchemy.orm import Session
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.config import Settings, load_settings
-from app.db import BrowserSession, LinkedAccount, MediaAsset, OAuthRequest, PublishJob, MIGRATION_HEAD, make_session_factory
+from app.db import (
+    BrowserSession,
+    LinkedAccount,
+    MediaAsset,
+    OAuthRequest,
+    PublishJob,
+    MIGRATION_HEAD,
+    make_session_factory,
+)
 from app.security import TokenCipher, browser_session, digest, new_browser_session, require_csrf
 from app.tiktok import TikTokClient
 
@@ -115,7 +124,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; "
             "img-src 'self' data:; connect-src 'self'; form-action 'self'"
         )
-        response.headers["Cache-Control"] = "no-store" if request.url.path.startswith(("/api/", "/tiktok/")) else "public, max-age=300"
+        response.headers["Cache-Control"] = (
+            "no-store" if request.url.path.startswith(("/api/", "/tiktok/")) else "public, max-age=300"
+        )
         if s.secure_cookies:
             response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         return response
@@ -164,23 +175,34 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             if not csrf or not secrets.compare_digest(digest(csrf), row.csrf_hash):
                 raise HTTPException(401)
             raw = request.cookies[COOKIE]
-            response = JSONResponse({
-                "connected": False, "scopes": [], "audited": s.app_audited,
-                "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-            })
+            response = JSONResponse(
+                {
+                    "connected": False,
+                    "scopes": [],
+                    "audited": s.app_audited,
+                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
+                }
+            )
         except HTTPException:
             raw, csrf, row = new_browser_session(session)
-            response = JSONResponse({
-                "connected": False, "scopes": [], "audited": s.app_audited,
-                "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-            })
+            response = JSONResponse(
+                {
+                    "connected": False,
+                    "scopes": [],
+                    "audited": s.app_audited,
+                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
+                }
+            )
         linked = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))
         if linked:
-            response = JSONResponse({
-                "connected": True, "scopes": linked.scopes.split(","),
-                "audited": s.app_audited,
-                "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-            })
+            response = JSONResponse(
+                {
+                    "connected": True,
+                    "scopes": linked.scopes.split(","),
+                    "audited": s.app_audited,
+                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
+                }
+            )
         issue_cookies(response, raw, csrf)
         return response
 
@@ -198,18 +220,27 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         state = secrets.token_urlsafe(32)
         session.add(OAuthRequest(state_hash=digest(state), session_id=row.id, expires_at=int(time.time()) + 600))
         session.commit()
-        query = urlencode({
-            "client_key": s.client_key, "response_type": "code", "scope": ",".join(s.scopes),
-            "redirect_uri": s.redirect_uri, "state": state,
-        })
+        query = urlencode(
+            {
+                "client_key": s.client_key,
+                "response_type": "code",
+                "scope": ",".join(s.scopes),
+                "redirect_uri": s.redirect_uri,
+                "state": state,
+            }
+        )
         response = RedirectResponse(TikTokClient.AUTHORIZE + "?" + query, status_code=302)
         issue_cookies(response, raw, csrf)
         return response
 
     @app.get("/tiktok/callback")
     async def callback(
-        request: Request, state: str = "", code: str = "", error: str = "",
-        session: Session = Depends(db), client: TikTokClient = Depends(tiktok)
+        request: Request,
+        state: str = "",
+        code: str = "",
+        error: str = "",
+        session: Session = Depends(db),
+        client: TikTokClient = Depends(tiktok),
     ):
         if error:
             return RedirectResponse("/?error=authorization_denied", status_code=303)
@@ -229,8 +260,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         found = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))
         if not found:
             found = LinkedAccount(
-                session_id=row.id, open_id=tokens["open_id"], scopes=tokens["scope"],
-                access_cipher="", refresh_cipher="", access_expires_at=0, refresh_expires_at=0
+                session_id=row.id,
+                open_id=tokens["open_id"],
+                scopes=tokens["scope"],
+                access_cipher="",
+                refresh_cipher="",
+                access_expires_at=0,
+                refresh_expires_at=0,
             )
             session.add(found)
         found.open_id = tokens["open_id"]
@@ -244,13 +280,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/creator-info")
     async def creator_info(
-        row: BrowserSession = Depends(current), session: Session = Depends(db),
-        client: TikTokClient = Depends(tiktok)
+        row: BrowserSession = Depends(current), session: Session = Depends(db), client: TikTokClient = Depends(tiktok)
     ):
         found = account(row, session, "video.publish")
         info = await client.creator_info(await access(found, session, client))
         return {
-            "nickname": info.get("creator_nickname", ""), "username": info.get("creator_username", ""),
+            "nickname": info.get("creator_nickname", ""),
+            "username": info.get("creator_username", ""),
             "privacy_level_options": info.get("privacy_level_options", []),
             "comment_disabled": info.get("comment_disabled", False),
             "duet_disabled": info.get("duet_disabled", False),
@@ -260,8 +296,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.post("/api/media")
     async def add_media(
-        request: Request, file: UploadFile = File(...), session: Session = Depends(db),
-        row: BrowserSession = Depends(current)
+        request: Request,
+        file: UploadFile = File(...),
+        session: Session = Depends(db),
+        row: BrowserSession = Depends(current),
     ):
         require_csrf(request, row)
         account(row, session)
@@ -288,33 +326,47 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise
         finally:
             await file.close()
-        asset = MediaAsset(id=item_id, session_id=row.id, filename=Path(file.filename or "video.mp4").name[:200],
-                           size=size, path=str(path))
+        asset = MediaAsset(
+            id=item_id,
+            session_id=row.id,
+            filename=Path(file.filename or "video.mp4").name[:200],
+            size=size,
+            path=str(path),
+        )
         session.add(asset)
         session.commit()
         return {"media_id": item_id, "filename": asset.filename, "size": size}
 
     @app.post("/api/publish")
     async def publish(
-        request: Request, payload: PublishInput, row: BrowserSession = Depends(current),
-        session: Session = Depends(db), client: TikTokClient = Depends(tiktok)
+        request: Request,
+        payload: PublishInput,
+        row: BrowserSession = Depends(current),
+        session: Session = Depends(db),
+        client: TikTokClient = Depends(tiktok),
     ):
         require_csrf(request, row)
         if not payload.consent:
             raise HTTPException(422, "Explicit confirmation is required")
         if payload.mode not in ("draft", "direct"):
             raise HTTPException(422, "Choose draft or direct")
-        earlier = session.scalar(select(PublishJob).where(
-            PublishJob.session_id == row.id, PublishJob.idempotency_key == payload.idempotency_key
-        ))
+        earlier = session.scalar(
+            select(PublishJob).where(
+                PublishJob.session_id == row.id, PublishJob.idempotency_key == payload.idempotency_key
+            )
+        )
         if earlier:
             if earlier.media_id != payload.media_id or earlier.mode != payload.mode:
                 raise HTTPException(409, "Idempotency key already belongs to a different request")
-            return {"job_id": earlier.id, "status": earlier.status, "publish_id": earlier.publish_id,
-                    "idempotent_replay": True}
-        media = session.scalar(select(MediaAsset).where(
-            MediaAsset.id == payload.media_id, MediaAsset.session_id == row.id
-        ))
+            return {
+                "job_id": earlier.id,
+                "status": earlier.status,
+                "publish_id": earlier.publish_id,
+                "idempotent_replay": True,
+            }
+        media = session.scalar(
+            select(MediaAsset).where(MediaAsset.id == payload.media_id, MediaAsset.session_id == row.id)
+        )
         if not media or not Path(media.path).is_file():
             raise HTTPException(404, "Upload a video first")
         required_scope = "video.publish" if payload.mode == "direct" else "video.upload"
@@ -335,27 +387,45 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             if creator.get("stitch_disabled") and not payload.disable_stitch:
                 raise HTTPException(422, "This creator has disabled stitches")
             privacy = payload.privacy
-        job = PublishJob(id=str(uuid.uuid4()), session_id=row.id, idempotency_key=payload.idempotency_key,
-                         media_id=media.id, mode=payload.mode, status="INITIATING")
+        job = PublishJob(
+            id=str(uuid.uuid4()),
+            session_id=row.id,
+            idempotency_key=payload.idempotency_key,
+            media_id=media.id,
+            mode=payload.mode,
+            status="INITIATING",
+        )
         session.add(job)
         try:
             session.commit()
         except IntegrityError:
             session.rollback()
-            earlier = session.scalar(select(PublishJob).where(
-                PublishJob.session_id == row.id, PublishJob.idempotency_key == payload.idempotency_key
-            ))
+            earlier = session.scalar(
+                select(PublishJob).where(
+                    PublishJob.session_id == row.id, PublishJob.idempotency_key == payload.idempotency_key
+                )
+            )
             if earlier:
-                return {"job_id": earlier.id, "status": earlier.status, "publish_id": earlier.publish_id,
-                        "idempotent_replay": True}
+                return {
+                    "job_id": earlier.id,
+                    "status": earlier.status,
+                    "publish_id": earlier.publish_id,
+                    "idempotent_replay": True,
+                }
             raise
         try:
             publish_id, upload_url = await client.init_video(
-                token, mode=payload.mode, media_size=media.size, caption=payload.caption,
-                privacy=privacy, disable_comment=payload.disable_comment,
-                disable_duet=payload.disable_duet, disable_stitch=payload.disable_stitch,
+                token,
+                mode=payload.mode,
+                media_size=media.size,
+                caption=payload.caption,
+                privacy=privacy,
+                disable_comment=payload.disable_comment,
+                disable_duet=payload.disable_duet,
+                disable_stitch=payload.disable_stitch,
                 brand_content_toggle=payload.brand_content_toggle,
-                brand_organic_toggle=payload.brand_organic_toggle, is_aigc=payload.is_aigc
+                brand_organic_toggle=payload.brand_organic_toggle,
+                is_aigc=payload.is_aigc,
             )
             job.publish_id = publish_id
             job.status = "TRANSFER_PENDING"
@@ -367,18 +437,23 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             job.status = "RECONCILIATION_REQUIRED" if job.publish_id else "INITIATION_FAILED"
             session.commit()
             raise
-        return {"job_id": job.id, "status": job.status, "publish_id": job.publish_id,
-                "note": "Draft uploads require the creator to finish posting inside TikTok." if payload.mode == "draft"
-                else "TikTok is processing your consented direct post."}
+        return {
+            "job_id": job.id,
+            "status": job.status,
+            "publish_id": job.publish_id,
+            "note": "Draft uploads require the creator to finish posting inside TikTok."
+            if payload.mode == "draft"
+            else "TikTok is processing your consented direct post.",
+        }
 
     @app.get("/api/jobs/{job_id}")
     async def job_status(
-        job_id: str, row: BrowserSession = Depends(current), session: Session = Depends(db),
-        client: TikTokClient = Depends(tiktok)
+        job_id: str,
+        row: BrowserSession = Depends(current),
+        session: Session = Depends(db),
+        client: TikTokClient = Depends(tiktok),
     ):
-        job = session.scalar(select(PublishJob).where(
-            PublishJob.id == job_id, PublishJob.session_id == row.id
-        ))
+        job = session.scalar(select(PublishJob).where(PublishJob.id == job_id, PublishJob.session_id == row.id))
         if not job:
             raise HTTPException(404, "Job not found")
         now = int(time.time())
@@ -389,13 +464,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             job.fail_reason = str(result.get("fail_reason", ""))[:160] or None
             job.checked_at = now
             session.commit()
-        return {"job_id": job.id, "status": job.status, "fail_reason": job.fail_reason,
-                "mode": job.mode, "publish_id": job.publish_id}
+        return {
+            "job_id": job.id,
+            "status": job.status,
+            "fail_reason": job.fail_reason,
+            "mode": job.mode,
+            "publish_id": job.publish_id,
+        }
 
     @app.post("/api/disconnect")
     async def disconnect(
-        request: Request, row: BrowserSession = Depends(current), session: Session = Depends(db),
-        client: TikTokClient = Depends(tiktok)
+        request: Request,
+        row: BrowserSession = Depends(current),
+        session: Session = Depends(db),
+        client: TikTokClient = Depends(tiktok),
     ):
         require_csrf(request, row)
         found = account(row, session)
@@ -407,8 +489,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.delete("/api/my-data")
     async def delete_my_data(
-        request: Request, row: BrowserSession = Depends(current), session: Session = Depends(db),
-        client: TikTokClient = Depends(tiktok)
+        request: Request,
+        row: BrowserSession = Depends(current),
+        session: Session = Depends(db),
+        client: TikTokClient = Depends(tiktok),
     ):
         require_csrf(request, row)
         found = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))

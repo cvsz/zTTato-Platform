@@ -1,4 +1,5 @@
 """Official TikTok OAuth and Content Posting API transport. Never log tokens or upload URLs."""
+
 from urllib.parse import urlparse
 
 import httpx
@@ -21,8 +22,7 @@ class TikTokClient:
             headers["Authorization"] = "Bearer " + token
         try:
             async with httpx.AsyncClient(
-                timeout=httpx.Timeout(60.0), follow_redirects=False,
-                trust_env=False, transport=self.transport
+                timeout=httpx.Timeout(60.0), follow_redirects=False, trust_env=False, transport=self.transport
             ) as client:
                 response = await client.request(method, url, headers=headers, data=form, json=data)
                 response.raise_for_status()
@@ -40,23 +40,42 @@ class TikTokClient:
 
     async def exchange(self, code: str) -> dict:
         s = self.settings
-        return await self._request("POST", self.API + "/v2/oauth/token/", form={
-            "client_key": s.client_key, "client_secret": s.client_secret, "code": code,
-            "grant_type": "authorization_code", "redirect_uri": s.redirect_uri,
-        })
+        return await self._request(
+            "POST",
+            self.API + "/v2/oauth/token/",
+            form={
+                "client_key": s.client_key,
+                "client_secret": s.client_secret,
+                "code": code,
+                "grant_type": "authorization_code",
+                "redirect_uri": s.redirect_uri,
+            },
+        )
 
     async def refresh(self, refresh_token: str) -> dict:
         s = self.settings
-        return await self._request("POST", self.API + "/v2/oauth/token/", form={
-            "client_key": s.client_key, "client_secret": s.client_secret,
-            "grant_type": "refresh_token", "refresh_token": refresh_token,
-        })
+        return await self._request(
+            "POST",
+            self.API + "/v2/oauth/token/",
+            form={
+                "client_key": s.client_key,
+                "client_secret": s.client_secret,
+                "grant_type": "refresh_token",
+                "refresh_token": refresh_token,
+            },
+        )
 
     async def revoke(self, access_token: str) -> None:
         s = self.settings
-        await self._request("POST", self.API + "/v2/oauth/revoke/", form={
-            "client_key": s.client_key, "client_secret": s.client_secret, "token": access_token,
-        })
+        await self._request(
+            "POST",
+            self.API + "/v2/oauth/revoke/",
+            form={
+                "client_key": s.client_key,
+                "client_secret": s.client_secret,
+                "token": access_token,
+            },
+        )
 
     async def creator_info(self, access_token: str) -> dict:
         payload = await self._request(
@@ -65,17 +84,27 @@ class TikTokClient:
         return payload.get("data", {})
 
     async def init_video(
-        self, access_token: str, *, mode: str, media_size: int,
-        caption: str, privacy: str | None, disable_comment: bool,
-        disable_duet: bool, disable_stitch: bool,
-        brand_content_toggle: bool = False, brand_organic_toggle: bool = False,
-        is_aigc: bool = False
+        self,
+        access_token: str,
+        *,
+        mode: str,
+        media_size: int,
+        caption: str,
+        privacy: str | None,
+        disable_comment: bool,
+        disable_duet: bool,
+        disable_stitch: bool,
+        brand_content_toggle: bool = False,
+        brand_organic_toggle: bool = False,
+        is_aigc: bool = False,
     ) -> tuple[str, str]:
         if mode == "direct":
             endpoint = "/v2/post/publish/video/init/"
             post_info = {
-                "title": caption, "privacy_level": privacy,
-                "disable_comment": disable_comment, "disable_duet": disable_duet,
+                "title": caption,
+                "privacy_level": privacy,
+                "disable_comment": disable_comment,
+                "disable_duet": disable_duet,
                 "disable_stitch": disable_stitch,
                 "brand_content_toggle": brand_content_toggle,
                 "brand_organic_toggle": brand_organic_toggle,
@@ -87,8 +116,10 @@ class TikTokClient:
         else:
             raise HTTPException(422, "Unsupported mode")
         request["source_info"] = {
-            "source": "FILE_UPLOAD", "video_size": media_size,
-            "chunk_size": media_size, "total_chunk_count": 1,
+            "source": "FILE_UPLOAD",
+            "video_size": media_size,
+            "chunk_size": media_size,
+            "total_chunk_count": 1,
         }
         payload = await self._request("POST", self.API + endpoint, token=access_token, data=request)
         result = payload.get("data", {})
@@ -102,8 +133,11 @@ class TikTokClient:
     def validate_upload_url(url: str) -> None:
         parsed = urlparse(url)
         if (
-            parsed.scheme != "https" or parsed.hostname != "open-upload.tiktokapis.com"
-            or parsed.port not in (None, 443) or parsed.username or parsed.password
+            parsed.scheme != "https"
+            or parsed.hostname != "open-upload.tiktokapis.com"
+            or parsed.port not in (None, 443)
+            or parsed.username
+            or parsed.password
         ):
             raise HTTPException(502, "TikTok supplied an unexpected upload destination")
 
@@ -117,13 +151,15 @@ class TikTokClient:
 
         try:
             async with httpx.AsyncClient(
-                timeout=httpx.Timeout(180.0), follow_redirects=False,
-                trust_env=False, transport=self.transport
+                timeout=httpx.Timeout(180.0), follow_redirects=False, trust_env=False, transport=self.transport
             ) as client:
                 result = await client.put(
                     url,
-                    headers={"Content-Type": "video/mp4", "Content-Length": str(size),
-                             "Content-Range": f"bytes 0-{size - 1}/{size}"},
+                    headers={
+                        "Content-Type": "video/mp4",
+                        "Content-Length": str(size),
+                        "Content-Range": f"bytes 0-{size - 1}/{size}",
+                    },
                     content=content(),
                 )
                 result.raise_for_status()
@@ -132,7 +168,6 @@ class TikTokClient:
 
     async def status(self, access_token: str, publish_id: str) -> dict:
         payload = await self._request(
-            "POST", self.API + "/v2/post/publish/status/fetch/",
-            token=access_token, data={"publish_id": publish_id}
+            "POST", self.API + "/v2/post/publish/status/fetch/", token=access_token, data={"publish_id": publish_id}
         )
         return payload.get("data", {})

@@ -1,4 +1,5 @@
 """Verify that a fresh schema can upgrade and downgrade without production data."""
+
 from pathlib import Path
 
 from alembic import command
