@@ -7,14 +7,23 @@ STATUS: implementation baseline; not TikTok-approved or verified production-read
 STACK: Python 3.12+, FastAPI, SQLAlchemy, PostgreSQL 17, HTTPX, server-rendered legal pages, vanilla JS UI.
 
 LOCAL SETUP:
-1. Copy .env.example to .env. Generate APP_ENCRYPTION_KEY using: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
-2. Enter your own real TikTok Client Key/Secret and legal entity, contact and address; never commit .env.
-3. For local use: pip install -r requirements-dev.txt && uvicorn app.main:app --reload
-4. For PostgreSQL: docker compose up --build -d
-5. App: / ; review walkthrough: /review-preview ; legal: /privacy-policy and /terms-of-service.
+1. Copy .env.example to .env. Generate APP_ENCRYPTION_KEY using: `python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`
+2. Enter your own real TikTok Client Key/Secret and legal entity, contact and address; never commit `.env`.
+3. For local use: `pip install -r requirements-dev.txt && uvicorn app.main:app --reload`
+4. For PostgreSQL: `docker compose up --build -d`
+5. App: `/` ; review walkthrough: `/review-preview` ; legal: `/privacy-policy` and `/terms-of-service`.
 
-Register https://zttato.zeaz.dev/tiktok/callback as the exact Web Login Kit redirect URI, if not already present. Never silently change registered redirects.
-Review docs/TIKTOK_REVIEW.md, docs/OPERATIONS.md and docs/PRODUCTION_GATES.md.
+Register `https://zttato.zeaz.dev/tiktok/callback` as the exact Web Login Kit redirect URI, if not already present. Never silently change registered redirects.
+
+## Engineering Documentation
+
+- [Universal AI Master Production-Grade Prompt](docs/AI_MASTER_PRODUCTION_PROMPT.md) — canonical execution prompt for OpenCode/Codex/Claude Code/Gemini CLI/Cursor/Copilot and other engineering agents.
+- [Architecture Boundaries](docs/ARCHITECTURE_BOUNDARIES.md) — mandatory separation of Commerce Sources, Affiliate Core, Content/Media, Distribution, and TikTok integration.
+- [TikTok Review Evidence](docs/TIKTOK_REVIEW.md)
+- [Operations](docs/OPERATIONS.md)
+- [Production Gates](docs/PRODUCTION_GATES.md)
+- [Migrations](docs/MIGRATIONS.md)
+
 Share Kit is NOT included: this web app uses Login Kit and Content Posting API only. No scraping or password automation is used.
 
-CREATOR DASHBOARD: /dashboard provides real browser interactions for local MP4 upload, current TikTok visibility choices, commercial disclosure, consent, draft/direct requests, status polling and account controls. This page is not a substitute for real TikTok Sandbox E2E evidence.
+CREATOR DASHBOARD: `/dashboard` provides real browser interactions for local MP4 upload, current TikTok visibility choices, commercial disclosure, consent, draft/direct requests, status polling and account controls. This page is not a substitute for real TikTok Sandbox E2E evidence.
