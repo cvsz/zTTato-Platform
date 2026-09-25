@@ -87,14 +87,34 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return cipher.decrypt(found.access_cipher)
         if found.refresh_expires_at <= now + 120:
             raise HTTPException(401, "TikTok authorization expired; reconnect")
-        tokens = await client.refresh(cipher.decrypt(found.refresh_cipher))
-        if tokens.get("open_id") != found.open_id or not tokens.get("access_token"):
+
+        # Refresh-token rotation must be serialized per linked account. Without a row lock,
+        # concurrent workers can both redeem the same refresh token and one worker can persist
+        # credentials that the other worker has already invalidated upstream.
+        locked = session.scalar(
+            select(LinkedAccount).where(LinkedAccount.id == found.id).with_for_update()
+        )
+        if not locked:
+            raise HTTPException(401, "TikTok authorization no longer exists")
+        now = int(time.time())
+        if locked.access_expires_at > now + 120:
+            return cipher.decrypt(locked.access_cipher)
+        if locked.refresh_expires_at <= now + 120:
+            raise HTTPException(401, "TikTok authorization expired; reconnect")
+
+        current_refresh = cipher.decrypt(locked.refresh_cipher)
+        tokens = await client.refresh(current_refresh)
+        if tokens.get("open_id") != locked.open_id or not tokens.get("access_token"):
             raise HTTPException(502, "Unexpected refresh response; reconnect")
-        found.access_cipher = cipher.encrypt(tokens["access_token"])
-        found.refresh_cipher = cipher.encrypt(tokens.get("refresh_token") or cipher.decrypt(found.refresh_cipher))
-        found.access_expires_at = now + int(tokens.get("expires_in", 3600))
-        found.refresh_expires_at = now + int(tokens.get("refresh_expires_in", 0))
-        found.scopes = tokens.get("scope", found.scopes)
+        access_expires_in = int(tokens.get("expires_in", 0))
+        refresh_expires_in = int(tokens.get("refresh_expires_in", 0))
+        if access_expires_in <= 0 or refresh_expires_in <= 0:
+            raise HTTPException(502, "TikTok returned invalid token expiry")
+        locked.access_cipher = cipher.encrypt(tokens["access_token"])
+        locked.refresh_cipher = cipher.encrypt(tokens.get("refresh_token") or current_refresh)
+        locked.access_expires_at = now + access_expires_in
+        locked.refresh_expires_at = now + refresh_expires_in
+        locked.scopes = tokens.get("scope", locked.scopes)
         session.commit()
         return tokens["access_token"]
 
@@ -481,8 +501,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ):
         require_csrf(request, row)
         found = account(row, session)
-        token = await access(found, session, client)
-        await client.revoke(token)
+        try:
+            token = await access(found, session, client)
+            await client.revoke(token)
+        except HTTPException:
+            # Local disconnect must remain possible when the upstream authorization has expired.
+            pass
         session.delete(found)
         session.commit()
         return {"disconnected": True}
@@ -497,7 +521,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         require_csrf(request, row)
         found = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))
         if found:
-            await client.revoke(await access(found, session, client))
+            try:
+                await client.revoke(await access(found, session, client))
+            except HTTPException:
+                # Data deletion must not be blocked by an expired or unavailable upstream token.
+                pass
             session.delete(found)
         jobs = session.scalars(select(PublishJob).where(PublishJob.session_id == row.id)).all()
         for job in jobs:
