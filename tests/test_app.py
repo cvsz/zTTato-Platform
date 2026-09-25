@@ -52,6 +52,29 @@ def test_session_is_created_without_exposing_tiktok_token(tmp_path):
     assert "access_token" not in response.text
 
 
+def test_existing_session_cookie_is_not_reflected_into_response(tmp_path):
+    client = TestClient(create_app(settings(tmp_path)))
+    created = client.get("/api/session")
+    assert "set-cookie" in created.headers
+
+    reused = client.get("/api/session")
+    assert reused.status_code == 200
+    assert "set-cookie" not in reused.headers
+
+
+def test_oauth_start_only_sets_server_generated_session_cookies(tmp_path):
+    app_settings = replace(settings(tmp_path), client_key="client-key")
+    client = TestClient(create_app(app_settings))
+
+    created = client.get("/auth/tiktok/start", follow_redirects=False)
+    assert created.status_code == 302
+    assert "set-cookie" in created.headers
+
+    reused = client.get("/auth/tiktok/start", follow_redirects=False)
+    assert reused.status_code == 302
+    assert "set-cookie" not in reused.headers
+
+
 def test_oauth_start_fails_closed_without_real_client_key(tmp_path):
     client = TestClient(create_app(settings(tmp_path)))
     response = client.get("/auth/tiktok/start", follow_redirects=False)
