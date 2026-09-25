@@ -15,10 +15,10 @@ from app.tiktok import MAX_VIDEO_SIZE, TikTokClient, plan_video_chunks
     ("size", "expected"),
     [
         (4 * 1024**2, (4 * 1024**2, 1)),
-        (64 * 1024**2, (64 * 1024**2, 1)),
-        (64 * 1024**2 + 1, (32 * 1024**2, 2)),
-        (70 * 1024**2, (32 * 1024**2, 2)),
-        (MAX_VIDEO_SIZE, (32 * 1024**2, 128)),
+        (64_000_000, (64_000_000, 1)),
+        (64_000_001, (32_000_000, 2)),
+        (70 * 1024**2, (32_000_000, 2)),
+        (MAX_VIDEO_SIZE, (32_000_000, 125)),
     ],
 )
 def test_chunk_plan_uses_tiktok_floor_rule(size, expected):
@@ -95,7 +95,7 @@ def test_init_video_declares_correct_chunk_count():
     assert captured[0]["source_info"] == {
         "source": "FILE_UPLOAD",
         "video_size": 70 * 1024**2,
-        "chunk_size": 32 * 1024**2,
+        "chunk_size": 32_000_000,
         "total_chunk_count": 2,
     }
 
@@ -129,8 +129,8 @@ def test_upload_streams_sequential_chunks_without_losing_trailing_bytes(tmp_path
         )
     )
     assert observed == [
-        (f"bytes 0-{32 * 1024**2 - 1}/{size}", 32 * 1024**2, 32 * 1024**2),
-        (f"bytes {32 * 1024**2}-{size - 1}/{size}", 32 * 1024**2 + 123, 32 * 1024**2 + 123),
+        (f"bytes 0-{32_000_000 - 1}/{size}", 32_000_000, 32_000_000),
+        (f"bytes {32_000_000}-{size - 1}/{size}", 32_000_000 + 123, 32_000_000 + 123),
     ]
 
 
