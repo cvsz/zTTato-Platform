@@ -91,9 +91,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         # Refresh-token rotation must be serialized per linked account. Without a row lock,
         # concurrent workers can both redeem the same refresh token and one worker can persist
         # credentials that the other worker has already invalidated upstream.
-        locked = session.scalar(
-            select(LinkedAccount).where(LinkedAccount.id == found.id).with_for_update()
-        )
+        locked = session.scalar(select(LinkedAccount).where(LinkedAccount.id == found.id).with_for_update())
         if not locked:
             raise HTTPException(401, "TikTok authorization no longer exists")
         now = int(time.time())
