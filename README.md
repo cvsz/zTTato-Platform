@@ -1,5 +1,11 @@
 # zTTato Creator Platform
 
+[![CI](https://github.com/cvsz/zTTato-Platform/actions/workflows/ci.yml/badge.svg)](https://github.com/cvsz/zTTato-Platform/actions/workflows/ci.yml)
+[![Production Gates](https://img.shields.io/badge/production%20gates-evidence--based-0ea5e9)](docs/PRODUCTION_GATES.md)
+[![AI Master Prompt](https://img.shields.io/badge/AI%20master%20prompt-canonical-06b6d4)](docs/AI_MASTER_PRODUCTION_PROMPT.md)
+[![TikTok](https://img.shields.io/badge/TikTok-integration%20boundary-64748b)](docs/ARCHITECTURE_BOUNDARIES.md)
+
+
 First-party TikTok creator application for `https://zttato.zeaz.dev` using official Login Kit and Content Posting API. Includes server-side encrypted tokens, draft uploads, consent-based direct posting, creator-info and publishing-status checks, legal pages, tests, Docker Compose and operations runbooks.
 
 > **STATUS:** implementation baseline; not TikTok-approved or verified production-ready. Run CI, real TikTok Sandbox review, legal signoff, isolated restore and deployment checks before launch.
@@ -62,6 +68,12 @@ Register `https://zttato.zeaz.dev/tiktok/callback` as the exact Web Login Kit re
 This repository uses official Login Kit and Content Posting API only. Share Kit is not included. No scraping, password automation, CAPTCHA bypass or anti-detection mechanisms are permitted.
 
 A development TikTok account is a test identity, not production approval. Sandbox evidence and external TikTok review must remain separate release gates.
+
+## Architecture Review
+
+![zTTato production architecture review](docs/assets/zttato-social-review.svg)
+
+> **Review snapshot — 2026-09-25:** zTTato is intentionally separated into Commerce Sources, Affiliate Core, Content/AI/Media and Distribution. The repository is **not** declared production-ready until the remaining evidence gates pass. See the [AI Master Prompt execution report](docs/AI_MASTER_PROMPT_EXECUTION_20260925.md).
 
 ## Production Readiness
 

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">zTTato production architecture review</title>
+  <desc id="desc">Social review card showing the separated Affiliate, Commerce, Content and Distribution architecture and evidence-based production status.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#07111f"/><stop offset="1" stop-color="#0b2235"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#67e8f9"/></linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1420" cy="120" r="260" fill="#22d3ee" opacity=".08"/>
+  <circle cx="120" cy="800" r="240" fill="#67e8f9" opacity=".05"/>
+  <rect x="72" y="64" width="1456" height="772" rx="36" fill="#081827" stroke="#1f4155"/>
+  <text x="120" y="145" fill="#67e8f9" font-family="Inter,Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="5">ZTTATO · PRODUCTION REVIEW</text>
+  <text x="120" y="220" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="62" font-weight="800">Affiliate Core ≠ TikTok</text>
+  <text x="120" y="270" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="25">Commerce sources → Affiliate → Content/Media → Distribution</text>
+  <g font-family="Inter,Arial,sans-serif">
+    <rect x="120" y="340" width="310" height="170" rx="22" fill="#0c2636" stroke="#22d3ee"/>
+    <text x="150" y="392" fill="#67e8f9" font-size="19" font-weight="700">COMMERCE</text>
+    <text x="150" y="430" fill="#f8fafc" font-size="28" font-weight="700">Sources</text>
+    <text x="150" y="466" fill="#94a3b8" font-size="18">Shopee · TikTok Shop</text>
+    <text x="150" y="495" fill="#64748b" font-size="16">Provider adapters</text>
+    <rect x="465" y="340" width="310" height="170" rx="22" fill="#0c2636" stroke="#22d3ee"/>
+    <text x="495" y="392" fill="#67e8f9" font-size="19" font-weight="700">AFFILIATE</text>
+    <text x="495" y="430" fill="#f8fafc" font-size="28" font-weight="700">Core</text>
+    <text x="495" y="466" fill="#94a3b8" font-size="18">Products · Offers · Links</text>
+    <text x="495" y="495" fill="#64748b" font-size="16">Campaigns · Analytics</text>
+    <rect x="810" y="340" width="310" height="170" rx="22" fill="#0c2636" stroke="#22d3ee"/>
+    <text x="840" y="392" fill="#67e8f9" font-size="19" font-weight="700">CONTENT</text>
+    <text x="840" y="430" fill="#f8fafc" font-size="28" font-weight="700">AI / Media</text>
+    <text x="840" y="466" fill="#94a3b8" font-size="18">Platform-neutral assets</text>
+    <text x="840" y="495" fill="#64748b" font-size="16">Reusable media pipeline</text>
+    <rect x="1155" y="340" width="310" height="170" rx="22" fill="#0c2636" stroke="#22d3ee"/>
+    <text x="1185" y="392" fill="#67e8f9" font-size="19" font-weight="700">DISTRIBUTION</text>
+    <text x="1185" y="430" fill="#f8fafc" font-size="28" font-weight="700">Providers</text>
+    <text x="1185" y="466" fill="#94a3b8" font-size="18">TikTok · future channels</text>
+    <text x="1185" y="495" fill="#64748b" font-size="16">Idempotent publish jobs</text>
+  </g>
+  <path d="M430 425h35M775 425h35M1120 425h35" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+  <rect x="120" y="570" width="1345" height="150" rx="24" fill="#07131f" stroke="#27465a"/>
+  <text x="155" y="622" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="700">Evidence-based status</text>
+  <text x="155" y="662" fill="#fbbf24" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="700">NOT PRODUCTION_READY YET</text>
+  <text x="155" y="696" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="17">Remaining: tenant isolation · commerce adapters · durable distribution · restore/rollback evidence · external TikTok approval</text>
+  <text x="120" y="790" fill="#64748b" font-family="Inter,Arial,sans-serif" font-size="16">github.com/cvsz/zTTato-Platform · AI Master Production Prompt execution · 2026-09-25</text>
+</svg>
