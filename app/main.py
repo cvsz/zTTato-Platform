@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 from fastapi import Depends, FastAPI, File, HTTPException, Request, UploadFile
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from sqlalchemy import select, text
@@ -169,6 +169,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/terms-of-service", include_in_schema=False)
     def terms_of_service():
         return HTMLResponse(safe_legal("terms-of-service.html"))
+
+    @app.get("/tiktok/uploading/", include_in_schema=False, response_class=PlainTextResponse)
+    def tiktok_site_verification():
+        return "tiktok-developers-site-verification=9WurARgpbnJkdus0r4bfvSZydNYNxKUC"
 
     @app.get("/health/live")
     def live():
