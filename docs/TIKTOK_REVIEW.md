@@ -3,6 +3,8 @@
 ## Portal configuration
 - Web/Desktop URL: https://zttato.zeaz.dev/
 - Redirect URI: https://zttato.zeaz.dev/tiktok/callback
+- Site verification URL: https://zttato.zeaz.dev/tiktok/uploading/
+- Expected verification body: `tiktok-developers-site-verification=9WurARgpbnJkdus0r4bfvSZydNYNxKUC`
 - Requested scopes: user.info.basic, video.upload, video.publish
 - Products implemented by this web app: Login Kit and Content Posting API.
 - Share Kit is not implemented by this repository; remove it from the app configuration unless a separate supported client demonstrates it.

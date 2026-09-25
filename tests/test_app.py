@@ -40,7 +40,7 @@ def test_tiktok_site_verification_endpoint(tmp_path):
     response = client.get("/tiktok/uploading/")
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/plain")
-    assert response.text.strip() == "tiktok-developers-site-verification=9WurARgpbnJkdus0r4bfvSZydNYNxKUC"
+    assert response.text == "tiktok-developers-site-verification=9WurARgpbnJkdus0r4bfvSZydNYNxKUC"
 
 
 def test_session_is_created_without_exposing_tiktok_token(tmp_path):
