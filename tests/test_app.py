@@ -35,6 +35,14 @@ def test_public_pages_and_headers(tmp_path):
         assert "frame-ancestors 'none'" in response.headers["content-security-policy"]
 
 
+def test_tiktok_site_verification_endpoint(tmp_path):
+    client = TestClient(create_app(settings(tmp_path)))
+    response = client.get("/tiktok/uploading/")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/plain")
+    assert response.text == "tiktok-developers-site-verification=9WurARgpbnJkdus0r4bfvSZydNYNxKUC"
+
+
 def test_session_is_created_without_exposing_tiktok_token(tmp_path):
     client = TestClient(create_app(settings(tmp_path)))
     response = client.get("/api/session")
