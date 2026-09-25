@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bookworm
+FROM python:3.14-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /srv
 RUN groupadd -r zttato && useradd -r -g zttato -d /srv zttato && mkdir -p /srv/data /srv/media && chown -R zttato:zttato /srv
