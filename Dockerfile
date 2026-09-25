@@ -1,7 +1,7 @@
-FROM python:3.14-slim-bookworm
+FROM python:3.14-alpine3.23
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /srv
-RUN groupadd -r zttato && useradd -r -g zttato -d /srv zttato && mkdir -p /srv/data /srv/media && chown -R zttato:zttato /srv
+RUN addgroup -S zttato && adduser -S -G zttato -h /srv zttato && mkdir -p /srv/data /srv/media && chown -R zttato:zttato /srv
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=zttato:zttato app/ ./app/
