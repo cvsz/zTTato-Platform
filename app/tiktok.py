@@ -9,17 +9,17 @@ from fastapi import HTTPException
 from app.config import Settings
 
 
-# TikTok Media Transfer Guide: 64 MiB maximum for a regular chunk, 128 MiB
-# for the final merged chunk, 1,000 chunks maximum, 4 GiB total.
-MAX_VIDEO_SIZE = 4 * 1024**3
-SINGLE_UPLOAD_LIMIT = 64 * 1024**2
-MULTIPART_CHUNK_SIZE = 32 * 1024**2
+# TikTok Media Transfer Guide: 64 MB maximum for a regular chunk, 128 MB
+# for the final merged chunk, 1,000 chunks maximum, 4 GB total.
+MAX_VIDEO_SIZE = 4_000_000_000
+SINGLE_UPLOAD_LIMIT = 64_000_000
+MULTIPART_CHUNK_SIZE = 32_000_000
 
 
 def plan_video_chunks(size: int) -> tuple[int, int]:
     """Return (declared chunk_size, total_chunk_count) following TikTok's floor rule."""
     if size < 1 or size > MAX_VIDEO_SIZE:
-        raise HTTPException(422, "TikTok video size must be between 1 byte and 4 GiB")
+        raise HTTPException(422, "TikTok video size must be between 1 byte and 4 GB")
     if size <= SINGLE_UPLOAD_LIMIT:
         return size, 1
     count = size // MULTIPART_CHUNK_SIZE
@@ -155,7 +155,7 @@ class TikTokClient:
         parsed = urlparse(url)
         host = (parsed.hostname or "").lower()
         official_upload_host = host == "open-upload.tiktokapis.com" or bool(
-            re.fullmatch(r"upload\\.[a-z0-9-]{2,16}\\.tiktokapis\\.com", host)
+            re.fullmatch(r"upload\.[a-z0-9-]{2,16}\.tiktokapis\.com", host)
         )
         try:
             port = parsed.port
