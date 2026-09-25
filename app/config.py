@@ -38,10 +38,10 @@ def validate_host_config(s: Settings) -> None:
         raise ValueError("APP_ALLOWED_HOSTS must contain at least one host")
     normalized_hosts = {host.strip().lower().rstrip(".") for host in s.allowed_hosts}
     base_host = u.hostname.lower().rstrip(".")
-    if base_host not in normalized_hosts and "*" not in normalized_hosts:
-        raise ValueError("APP_ALLOWED_HOSTS must include the APP_BASE_URL hostname")
     if any("://" in host or "/" in host or "@" in host for host in normalized_hosts if host != "*"):
         raise ValueError("APP_ALLOWED_HOSTS must contain hostnames only")
+    if base_host not in normalized_hosts and "*" not in normalized_hosts:
+        raise ValueError("APP_ALLOWED_HOSTS must include the APP_BASE_URL hostname")
 
 
 def load_settings() -> Settings:
