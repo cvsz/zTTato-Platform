@@ -170,6 +170,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def terms_of_service():
         return HTMLResponse(safe_legal("terms-of-service.html"))
 
+    @app.get("/tiktok/uploading/", include_in_schema=False)
+    def tiktok_site_verification():
+        return FileResponse(WEB / "tiktok-site-verification.txt", media_type="text/plain")
+
     @app.get("/health/live")
     def live():
         return {"status": "ok"}
