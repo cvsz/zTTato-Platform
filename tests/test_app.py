@@ -59,3 +59,41 @@ def test_production_readiness_fails_without_migration(tmp_path):
     app = create_app(replace(settings(tmp_path), env="production"))
     response = TestClient(app).get("/health/ready")
     assert response.status_code == 503
+
+
+def test_production_rejects_host_mismatch(tmp_path):
+    bad = replace(
+        settings(tmp_path),
+        env="production",
+        base_url="https://zttato.zeaz.dev",
+        allowed_hosts=("localhost",),
+        database_url="postgresql+psycopg://user:password@db:5432/zttato",
+        encryption_key="valid-test-key",
+        client_key="client-key",
+        client_secret="client-secret",
+    )
+    try:
+        create_app(bad)
+    except ValueError as exc:
+        assert "APP_ALLOWED_HOSTS" in str(exc)
+    else:
+        raise AssertionError("host mismatch must fail closed")
+
+
+def test_production_rejects_url_values_in_allowed_hosts(tmp_path):
+    bad = replace(
+        settings(tmp_path),
+        env="production",
+        base_url="https://zttato.zeaz.dev",
+        allowed_hosts=("https://zttato.zeaz.dev",),
+        database_url="postgresql+psycopg://user:password@db:5432/zttato",
+        encryption_key="valid-test-key",
+        client_key="client-key",
+        client_secret="client-secret",
+    )
+    try:
+        create_app(bad)
+    except ValueError as exc:
+        assert "hostnames only" in str(exc)
+    else:
+        raise AssertionError("URL-shaped allowed host must fail closed")
