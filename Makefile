@@ -12,7 +12,7 @@ lint:
 	ruff format --check app tests
 
 test:
-	pytest
+	python -m pytest
 
 build:
 	python -m compileall -q app

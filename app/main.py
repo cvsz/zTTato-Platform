@@ -13,12 +13,20 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Redirect
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from sqlalchemy import select, text
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from app.config import Settings, load_settings
-from app.db import BrowserSession, LinkedAccount, MediaAsset, OAuthRequest, PublishJob, make_session_factory
+from app.config import Settings, load_settings, validate_host_config
+from app.db import (
+    BrowserSession,
+    LinkedAccount,
+    MediaAsset,
+    OAuthRequest,
+    PublishJob,
+    MIGRATION_HEAD,
+    make_session_factory,
+)
 from app.security import TokenCipher, browser_session, digest, new_browser_session, require_csrf
 from app.tiktok import TikTokClient
 
@@ -44,13 +52,14 @@ class PublishInput(BaseModel):
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     s = settings or load_settings()
+    validate_host_config(s)
     app = FastAPI(title="zTTato Creator", docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(s.allowed_hosts))
     app.mount("/assets", StaticFiles(directory=WEB), name="assets")
     Path(s.media_dir).mkdir(parents=True, exist_ok=True)
     if s.database_url.startswith("sqlite:///"):
         Path(s.database_url.removeprefix("sqlite:///")).parent.mkdir(parents=True, exist_ok=True)
-    engine, session_factory = make_session_factory(s.database_url)
+    engine, session_factory = make_session_factory(s.database_url, bootstrap=s.env != "production")
     cipher = TokenCipher(s.encryption_key)
     app.state.tiktok = TikTokClient(s)
     app.state.settings = s
@@ -79,14 +88,32 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return cipher.decrypt(found.access_cipher)
         if found.refresh_expires_at <= now + 120:
             raise HTTPException(401, "TikTok authorization expired; reconnect")
-        tokens = await client.refresh(cipher.decrypt(found.refresh_cipher))
-        if tokens.get("open_id") != found.open_id or not tokens.get("access_token"):
+
+        # Refresh-token rotation must be serialized per linked account. Without a row lock,
+        # concurrent workers can both redeem the same refresh token and one worker can persist
+        # credentials that the other worker has already invalidated upstream.
+        locked = session.scalar(select(LinkedAccount).where(LinkedAccount.id == found.id).with_for_update())
+        if not locked:
+            raise HTTPException(401, "TikTok authorization no longer exists")
+        now = int(time.time())
+        if locked.access_expires_at > now + 120:
+            return cipher.decrypt(locked.access_cipher)
+        if locked.refresh_expires_at <= now + 120:
+            raise HTTPException(401, "TikTok authorization expired; reconnect")
+
+        current_refresh = cipher.decrypt(locked.refresh_cipher)
+        tokens = await client.refresh(current_refresh)
+        if tokens.get("open_id") != locked.open_id or not tokens.get("access_token"):
             raise HTTPException(502, "Unexpected refresh response; reconnect")
-        found.access_cipher = cipher.encrypt(tokens["access_token"])
-        found.refresh_cipher = cipher.encrypt(tokens.get("refresh_token") or cipher.decrypt(found.refresh_cipher))
-        found.access_expires_at = now + int(tokens.get("expires_in", 3600))
-        found.refresh_expires_at = now + int(tokens.get("refresh_expires_in", 0))
-        found.scopes = tokens.get("scope", found.scopes)
+        access_expires_in = int(tokens.get("expires_in", 0))
+        refresh_expires_in = int(tokens.get("refresh_expires_in", 0))
+        if access_expires_in <= 0 or refresh_expires_in <= 0:
+            raise HTTPException(502, "TikTok returned invalid token expiry")
+        locked.access_cipher = cipher.encrypt(tokens["access_token"])
+        locked.refresh_cipher = cipher.encrypt(tokens.get("refresh_token") or current_refresh)
+        locked.access_expires_at = now + access_expires_in
+        locked.refresh_expires_at = now + refresh_expires_in
+        locked.scopes = tokens.get("scope", locked.scopes)
         session.commit()
         return tokens["access_token"]
 
@@ -143,65 +170,64 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def terms_of_service():
         return HTMLResponse(safe_legal("terms-of-service.html"))
 
+    @app.get("/tiktok/uploading/", include_in_schema=False)
+    def tiktok_site_verification():
+        return FileResponse(WEB / "tiktok-site-verification.txt", media_type="text/plain")
+
     @app.get("/health/live")
     def live():
         return {"status": "ok"}
 
     @app.get("/health/ready")
     def ready(session: Session = Depends(db)):
-        session.execute(text("SELECT 1"))
+        try:
+            session.execute(text("SELECT 1"))
+            if s.env == "production":
+                revision = session.scalar(text("SELECT version_num FROM alembic_version"))
+                if revision != MIGRATION_HEAD:
+                    raise HTTPException(503, "Database migration is not current")
+        except SQLAlchemyError as exc:
+            raise HTTPException(503, "Database is unavailable or migrations are missing") from exc
         return {"status": "ready"}
 
     @app.get("/api/session")
     def session_view(request: Request, session: Session = Depends(db)):
+        new_cookie_values: tuple[str, str] | None = None
         try:
             row = browser_session(request, session)
             csrf = request.cookies.get(CSRF, "")
             if not csrf or not secrets.compare_digest(digest(csrf), row.csrf_hash):
                 raise HTTPException(401)
-            raw = request.cookies[COOKIE]
-            response = JSONResponse(
-                {
-                    "connected": False,
-                    "scopes": [],
-                    "audited": s.app_audited,
-                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-                }
-            )
         except HTTPException:
             raw, csrf, row = new_browser_session(session)
-            response = JSONResponse(
-                {
-                    "connected": False,
-                    "scopes": [],
-                    "audited": s.app_audited,
-                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-                }
-            )
+            new_cookie_values = (raw, csrf)
+
         linked = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))
-        if linked:
-            response = JSONResponse(
-                {
-                    "connected": True,
-                    "scopes": linked.scopes.split(","),
-                    "audited": s.app_audited,
-                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-                }
-            )
-        issue_cookies(response, raw, csrf)
+        response = JSONResponse(
+            {
+                "connected": bool(linked),
+                "scopes": linked.scopes.split(",") if linked else [],
+                "audited": s.app_audited,
+                "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
+            }
+        )
+        if new_cookie_values:
+            issue_cookies(response, *new_cookie_values)
         return response
 
     @app.get("/auth/tiktok/start")
     def start(request: Request, session: Session = Depends(db)):
         if not s.client_key or s.client_key.startswith("REPLACE_"):
             raise HTTPException(503, "TikTok Client Key is not configured")
+        new_cookie_values: tuple[str, str] | None = None
         try:
             row = browser_session(request, session)
-            raw, csrf = request.cookies[COOKIE], request.cookies.get(CSRF, "")
+            csrf = request.cookies.get(CSRF, "")
             if not csrf or digest(csrf) != row.csrf_hash:
                 raise HTTPException(401)
         except HTTPException:
             raw, csrf, row = new_browser_session(session)
+            new_cookie_values = (raw, csrf)
         state = secrets.token_urlsafe(32)
         session.add(OAuthRequest(state_hash=digest(state), session_id=row.id, expires_at=int(time.time()) + 600))
         session.commit()
@@ -215,7 +241,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             }
         )
         response = RedirectResponse(TikTokClient.AUTHORIZE + "?" + query, status_code=302)
-        issue_cookies(response, raw, csrf)
+        if new_cookie_values:
+            issue_cookies(response, *new_cookie_values)
         return response
 
     @app.get("/tiktok/callback")
@@ -466,8 +493,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ):
         require_csrf(request, row)
         found = account(row, session)
-        token = await access(found, session, client)
-        await client.revoke(token)
+        try:
+            token = await access(found, session, client)
+            await client.revoke(token)
+        except HTTPException:
+            # Local disconnect must remain possible when the upstream authorization has expired.
+            pass
         session.delete(found)
         session.commit()
         return {"disconnected": True}
@@ -482,7 +513,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         require_csrf(request, row)
         found = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))
         if found:
-            await client.revoke(await access(found, session, client))
+            try:
+                await client.revoke(await access(found, session, client))
+            except HTTPException:
+                # Data deletion must not be blocked by an expired or unavailable upstream token.
+                pass
             session.delete(found)
         jobs = session.scalars(select(PublishJob).where(PublishJob.session_id == row.id)).all()
         for job in jobs:
@@ -504,7 +539,4 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     return app
 
 
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run("app.main:create_app", factory=True, host="127.0.0.1", port=8000)
+app = create_app()

@@ -1,49 +1,25 @@
-# Secrets and credentials
+.git
+.github
 .env
 .env.*
-*.pem
-*.key
-*.crt
-id_rsa*
-id_ed25519*
-
-# Build debris
+!.env.example
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 .pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.mypy_cache/
 .ruff_cache/
-
-# Virtual environments
 .venv/
 venv/
-env/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Git
-.git/
-.gitignore
-
-# Documentation (not needed in image)
-*.md
-!README.md
-
-# Tests
-tests/
-
-# CI/CD
-.github/
+dist/
+build/
+media/
+data/
+*.db
+*.sqlite*
+*.log
+*.pem
+*.key
+*.p12
+*.pfx
+*.zip
+*.tar
+*.tar.gz

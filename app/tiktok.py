@@ -1,11 +1,31 @@
 """Official TikTok OAuth and Content Posting API transport. Never log tokens or upload URLs."""
 
+import re
 from urllib.parse import urlparse
 
 import httpx
 from fastapi import HTTPException
 
 from app.config import Settings
+
+
+# TikTok Media Transfer Guide: 64 MB maximum for a regular chunk, 128 MB
+# for the final merged chunk, 1,000 chunks maximum, 4 GB total.
+MAX_VIDEO_SIZE = 4_000_000_000
+SINGLE_UPLOAD_LIMIT = 64_000_000
+MULTIPART_CHUNK_SIZE = 32_000_000
+
+
+def plan_video_chunks(size: int) -> tuple[int, int]:
+    """Return (declared chunk_size, total_chunk_count) following TikTok's floor rule."""
+    if size < 1 or size > MAX_VIDEO_SIZE:
+        raise HTTPException(422, "TikTok video size must be between 1 byte and 4 GB")
+    if size <= SINGLE_UPLOAD_LIMIT:
+        return size, 1
+    count = size // MULTIPART_CHUNK_SIZE
+    if count > 1000:
+        raise HTTPException(422, "Too many TikTok upload chunks")
+    return MULTIPART_CHUNK_SIZE, count
 
 
 class TikTokClient:
@@ -115,11 +135,12 @@ class TikTokClient:
             endpoint, request = "/v2/post/publish/inbox/video/init/", {}
         else:
             raise HTTPException(422, "Unsupported mode")
+        chunk_size, chunk_count = plan_video_chunks(media_size)
         request["source_info"] = {
             "source": "FILE_UPLOAD",
             "video_size": media_size,
-            "chunk_size": media_size,
-            "total_chunk_count": 1,
+            "chunk_size": chunk_size,
+            "total_chunk_count": chunk_count,
         }
         payload = await self._request("POST", self.API + endpoint, token=access_token, data=request)
         result = payload.get("data", {})
@@ -132,39 +153,66 @@ class TikTokClient:
     @staticmethod
     def validate_upload_url(url: str) -> None:
         parsed = urlparse(url)
+        host = (parsed.hostname or "").lower()
+        official_upload_host = host == "open-upload.tiktokapis.com" or bool(
+            re.fullmatch(r"upload\.[a-z0-9-]{2,16}\.tiktokapis\.com", host)
+        )
+        try:
+            port = parsed.port
+        except ValueError as exc:
+            raise HTTPException(502, "TikTok supplied an invalid upload URL") from exc
         if (
             parsed.scheme != "https"
-            or parsed.hostname != "open-upload.tiktokapis.com"
-            or parsed.port not in (None, 443)
+            or not official_upload_host
+            or port not in (None, 443)
             or parsed.username
             or parsed.password
+            or parsed.fragment
+            or parsed.path not in ("/video/", "/upload/")
+            or not parsed.query
         ):
             raise HTTPException(502, "TikTok supplied an unexpected upload destination")
 
     async def upload_video(self, url: str, path: str, size: int) -> None:
         self.validate_upload_url(url)
+        chunk_size, chunk_count = plan_video_chunks(size)
 
-        async def content():
+        async with httpx.AsyncClient(
+            timeout=httpx.Timeout(180.0), follow_redirects=False, trust_env=False, transport=self.transport
+        ) as client:
             with open(path, "rb") as stream:
-                while part := stream.read(1024 * 1024):
-                    yield part
+                for index in range(chunk_count):
+                    offset = stream.tell()
+                    # Merge the trailing remainder into the last chunk, as required by TikTok.
+                    length = size - offset if index == chunk_count - 1 else chunk_size
 
-        try:
-            async with httpx.AsyncClient(
-                timeout=httpx.Timeout(180.0), follow_redirects=False, trust_env=False, transport=self.transport
-            ) as client:
-                result = await client.put(
-                    url,
-                    headers={
-                        "Content-Type": "video/mp4",
-                        "Content-Length": str(size),
-                        "Content-Range": f"bytes 0-{size - 1}/{size}",
-                    },
-                    content=content(),
-                )
-                result.raise_for_status()
-        except httpx.HTTPError as exc:
-            raise HTTPException(502, "TikTok upload failed; status must be reconciled before retry") from exc
+                    async def content():
+                        remaining = length
+                        while remaining:
+                            part = stream.read(min(1024 * 1024, remaining))
+                            if not part:
+                                raise HTTPException(502, "Media file changed during TikTok transfer")
+                            remaining -= len(part)
+                            yield part
+
+                    try:
+                        response = await client.put(
+                            url,
+                            headers={
+                                "Content-Type": "video/mp4",
+                                "Content-Length": str(length),
+                                "Content-Range": f"bytes {offset}-{offset + length - 1}/{size}",
+                            },
+                            content=content(),
+                        )
+                        # 206 confirms a nonfinal part; 201 means all parts were received.
+                        expected = 201 if index == chunk_count - 1 else 206
+                        if response.status_code != expected:
+                            response.raise_for_status()
+                            raise HTTPException(502, "Unexpected TikTok chunk acknowledgement; reconcile status")
+                    except httpx.HTTPError as exc:
+                        # Never restart from byte zero after an ambiguous provider response.
+                        raise HTTPException(502, "TikTok transfer is uncertain; reconcile before retry") from exc
 
     async def status(self, access_token: str, publish_id: str) -> dict:
         payload = await self._request(

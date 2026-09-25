@@ -11,12 +11,13 @@ concurrency:
 jobs:
   python:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       matrix:
         python: ['3.12','3.13']
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: ${{ matrix.python }}
           cache: pip
@@ -24,25 +25,72 @@ jobs:
       - run: python -m compileall -q app
       - run: ruff check app tests
       - run: ruff format --check app tests
-      - run: pytest
+      - run: python -m pytest
       - run: pip check
   repository-baseline:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Required files and no tracked secret files
         shell: bash
         run: |
           set -euo pipefail
-          for path in README.md SECURITY.md AGENTS.md Dockerfile compose.yaml .env.example docs/TIKTOK_REVIEW.md docs/PRODUCTION_GATES.md; do test -f "$path"; done
+          for path in README.md SECURITY.md AGENTS.md Dockerfile compose.yaml .env.example docs/TIKTOK_REVIEW.md docs/PRODUCTION_GATES.md docs/RELEASE_PROTECTION.md .github/workflows/release-protection.yml; do test -f "$path"; done
           ! git ls-files | grep -E '(^|/)(\.env|id_rsa|id_ed25519|.*\.pem|.*\.key)$' | grep -v '^\.env\.example$'
   container:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: docker build -t zttato:ci .
       - run: docker run --rm -d --name zttato-ci -p 18000:8000 zttato:ci
       - run: |
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18000/health/live && exit 0; sleep 1; done
           docker logs zttato-ci
           exit 1
+  postgres-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: zttato
+          POSTGRES_USER: zttato
+          POSTGRES_PASSWORD: ${{ github.run_id }}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U zttato -d zttato"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Apply, verify, downgrade and reapply migration on isolated PostgreSQL
+        env:
+          DATABASE_URL: postgresql+psycopg://zttato:${{ github.run_id }}@localhost:5432/zttato
+        shell: bash
+        run: |
+          set -euo pipefail
+          alembic upgrade head
+          alembic current --check-heads
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine, inspect, text
+          from app.db import MIGRATION_HEAD
+          engine = create_engine(os.environ["DATABASE_URL"])
+          assert set(("browser_sessions", "oauth_requests", "linked_accounts",
+                      "media_assets", "publish_jobs")) <= set(inspect(engine).get_table_names())
+          with engine.connect() as db:
+              assert db.scalar(text("SELECT version_num FROM alembic_version")) == MIGRATION_HEAD
+          engine.dispose()
+          PY
+          alembic downgrade base
+          alembic upgrade head
+          alembic current --check-heads
