@@ -39,7 +39,11 @@ def load_settings() -> Settings:
         encryption_key=get("APP_ENCRYPTION_KEY", ""),
         client_key=get("TIKTOK_CLIENT_KEY", ""),
         client_secret=get("TIKTOK_CLIENT_SECRET", ""),
-        scopes=tuple(x.strip() for x in get("TIKTOK_SCOPES", "user.info.basic,video.upload,video.publish").split(",") if x.strip()),
+        scopes=tuple(
+            x.strip()
+            for x in get("TIKTOK_SCOPES", "user.info.basic,video.upload,video.publish").split(",")
+            if x.strip()
+        ),
         app_audited=get("TIKTOK_APP_AUDITED", "false").lower() == "true",
         legal_entity=get("LEGAL_ENTITY", ""),
         legal_email=get("LEGAL_CONTACT_EMAIL", ""),
