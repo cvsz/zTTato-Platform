@@ -40,6 +40,7 @@ Affiliate Analytics
 - [Scope & Responsibility Matrix](docs/SCOPE_AND_RESPONSIBILITY_MATRIX.md) — canonical ownership, dependency, failure-isolation and security matrix.
 - [Architecture Boundaries](docs/ARCHITECTURE_BOUNDARIES.md) — mandatory separation of Commerce, Affiliate, Content/Media, Distribution and TikTok.
 - [TikTok Review Evidence](docs/TIKTOK_REVIEW.md)
+- [TikTok Media Transfer Contract](docs/TIKTOK_MEDIA_TRANSFER.md) — official FILE_UPLOAD chunking, upload destinations, tests and remaining real Sandbox evidence.
 - [Operations](docs/OPERATIONS.md)
 - [Production Gates](docs/PRODUCTION_GATES.md)
 - [Migrations](docs/MIGRATIONS.md)
