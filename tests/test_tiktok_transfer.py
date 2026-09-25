@@ -130,7 +130,7 @@ def test_upload_streams_sequential_chunks_without_losing_trailing_bytes(tmp_path
     )
     assert observed == [
         (f"bytes 0-{32_000_000 - 1}/{size}", 32_000_000, 32_000_000),
-        (f"bytes {32_000_000}-{size - 1}/{size}", 32_000_000 + 123, 32_000_000 + 123),
+        (f"bytes {32_000_000}-{size - 1}/{size}", size - 32_000_000, size - 32_000_000),
     ]
 
 
