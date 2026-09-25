@@ -215,6 +215,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def tiktok_site_verification_file():
         return FileResponse(WEB / "tiktok-site-verification.txt", media_type="text/plain")
 
+    @app.get("/tiktok/uploading/tiktokL5nFtrSuDDcgIfFd8fOmSq9Olco5u3U2.txt", include_in_schema=False)
+    def tiktok_uploading_verification_file():
+        return FileResponse(WEB / "tiktokL5nFtrSuDDcgIfFd8fOmSq9Olco5u3U2.txt", media_type="text/plain")
+
+    @app.get("/tiktok/video/", include_in_schema=False)
+    def tiktok_video_verification():
+        return FileResponse(WEB / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain")
+
+    @app.get("/tiktok/video/tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", include_in_schema=False)
+    def tiktok_video_verification_file():
+        return FileResponse(WEB / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain")
+
     @app.get("/health/live")
     def live():
         return {"status": "ok"}
