@@ -216,16 +216,42 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return FileResponse(WEB / "tiktok-site-verification.txt", media_type="text/plain")
 
     @app.get("/tiktok/uploading/tiktokL5nFtrSuDDcgIfFd8fOmSq9Olco5u3U2.txt", include_in_schema=False)
-    def tiktok_uploading_verification_file():
+    def tiktok_uploading_verification_file_2():
         return FileResponse(WEB / "tiktokL5nFtrSuDDcgIfFd8fOmSq9Olco5u3U2.txt", media_type="text/plain")
 
     @app.get("/tiktok/video/", include_in_schema=False)
     def tiktok_video_verification():
-        return FileResponse(WEB / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain")
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain"
+        )
 
     @app.get("/tiktok/video/tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", include_in_schema=False)
     def tiktok_video_verification_file():
-        return FileResponse(WEB / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain")
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/tiktokexEbdyIAfLfQqONX57XBxjXQ8qX0VgqJ.txt", include_in_schema=False)
+    def tiktok_root_verification_file():
+        return FileResponse(WEB / "tiktok" / "tiktokexEbdyIAfLfQqONX57XBxjXQ8qX0VgqJ.txt", media_type="text/plain")
+
+    @app.get("/tiktok/uploading/tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", include_in_schema=False)
+    def tiktok_uploading_verification_file():
+        return FileResponse(
+            WEB / "tiktok" / "uploading" / "tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/video/tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", include_in_schema=False)
+    def tiktok_video_verification_file_ku5():
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/video/tiktokehTZH5bucSOvyOZ3q4JqwjWS4RHvJKpS.txt", include_in_schema=False)
+    def tiktok_video_verification_file_eh():
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokehTZH5bucSOvyOZ3q4JqwjWS4RHvJKpS.txt", media_type="text/plain"
+        )
 
     @app.get("/health/live")
     def live():
