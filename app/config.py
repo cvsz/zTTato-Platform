@@ -29,6 +29,21 @@ class Settings:
         return self.base_url.startswith("https://")
 
 
+def validate_host_config(s: Settings) -> None:
+    """Reject untrusted and inconsistent public host configuration."""
+    u = urlparse(s.base_url)
+    if u.scheme not in ("https", "http") or not u.hostname or u.username or u.password or u.query or u.fragment:
+        raise ValueError("APP_BASE_URL must be an absolute URL without credentials or query")
+    if not s.allowed_hosts:
+        raise ValueError("APP_ALLOWED_HOSTS must contain at least one host")
+    normalized_hosts = {host.strip().lower().rstrip(".") for host in s.allowed_hosts}
+    base_host = u.hostname.lower().rstrip(".")
+    if base_host not in normalized_hosts and "*" not in normalized_hosts:
+        raise ValueError("APP_ALLOWED_HOSTS must include the APP_BASE_URL hostname")
+    if any("://" in host or "/" in host or "@" in host for host in normalized_hosts if host != "*"):
+        raise ValueError("APP_ALLOWED_HOSTS must contain hostnames only")
+
+
 def load_settings() -> Settings:
     get = os.environ.get
     s = Settings(
@@ -51,17 +66,8 @@ def load_settings() -> Settings:
         media_dir=get("MEDIA_DIR", "./media"),
         max_video_bytes=int(get("MAX_VIDEO_BYTES", "67108864")),
     )
+    validate_host_config(s)
     u = urlparse(s.base_url)
-    if u.scheme not in ("https", "http") or not u.hostname or u.username or u.password or u.query or u.fragment:
-        raise ValueError("APP_BASE_URL must be an absolute URL without credentials or query")
-    if not s.allowed_hosts:
-        raise ValueError("APP_ALLOWED_HOSTS must contain at least one host")
-    normalized_hosts = {host.strip().lower().rstrip(".") for host in s.allowed_hosts}
-    base_host = u.hostname.lower().rstrip(".")
-    if base_host not in normalized_hosts and "*" not in normalized_hosts:
-        raise ValueError("APP_ALLOWED_HOSTS must include the APP_BASE_URL hostname")
-    if any("://" in host or "/" in host or "@" in host for host in normalized_hosts if host != "*"):
-        raise ValueError("APP_ALLOWED_HOSTS must contain hostnames only")
     if s.env == "production":
         if u.scheme != "https":
             raise ValueError("Production APP_BASE_URL must use HTTPS")
