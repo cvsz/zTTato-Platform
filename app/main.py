@@ -17,7 +17,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from app.config import Settings, load_settings
+from app.config import Settings, load_settings, validate_host_config
 from app.db import (
     BrowserSession,
     LinkedAccount,
@@ -52,6 +52,7 @@ class PublishInput(BaseModel):
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     s = settings or load_settings()
+    validate_host_config(s)
     app = FastAPI(title="zTTato Creator", docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(s.allowed_hosts))
     app.mount("/assets", StaticFiles(directory=WEB), name="assets")
