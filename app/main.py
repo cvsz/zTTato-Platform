@@ -192,54 +192,42 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/session")
     def session_view(request: Request, session: Session = Depends(db)):
+        new_cookie_values: tuple[str, str] | None = None
         try:
             row = browser_session(request, session)
             csrf = request.cookies.get(CSRF, "")
             if not csrf or not secrets.compare_digest(digest(csrf), row.csrf_hash):
                 raise HTTPException(401)
-            raw = request.cookies[COOKIE]
-            response = JSONResponse(
-                {
-                    "connected": False,
-                    "scopes": [],
-                    "audited": s.app_audited,
-                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-                }
-            )
         except HTTPException:
             raw, csrf, row = new_browser_session(session)
-            response = JSONResponse(
-                {
-                    "connected": False,
-                    "scopes": [],
-                    "audited": s.app_audited,
-                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-                }
-            )
+            new_cookie_values = (raw, csrf)
+
         linked = session.scalar(select(LinkedAccount).where(LinkedAccount.session_id == row.id))
-        if linked:
-            response = JSONResponse(
-                {
-                    "connected": True,
-                    "scopes": linked.scopes.split(","),
-                    "audited": s.app_audited,
-                    "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
-                }
-            )
-        issue_cookies(response, raw, csrf)
+        response = JSONResponse(
+            {
+                "connected": bool(linked),
+                "scopes": linked.scopes.split(",") if linked else [],
+                "audited": s.app_audited,
+                "legal_ready": bool(s.legal_entity and s.legal_email and s.legal_address),
+            }
+        )
+        if new_cookie_values:
+            issue_cookies(response, *new_cookie_values)
         return response
 
     @app.get("/auth/tiktok/start")
     def start(request: Request, session: Session = Depends(db)):
         if not s.client_key or s.client_key.startswith("REPLACE_"):
             raise HTTPException(503, "TikTok Client Key is not configured")
+        new_cookie_values: tuple[str, str] | None = None
         try:
             row = browser_session(request, session)
-            raw, csrf = request.cookies[COOKIE], request.cookies.get(CSRF, "")
+            csrf = request.cookies.get(CSRF, "")
             if not csrf or digest(csrf) != row.csrf_hash:
                 raise HTTPException(401)
         except HTTPException:
             raw, csrf, row = new_browser_session(session)
+            new_cookie_values = (raw, csrf)
         state = secrets.token_urlsafe(32)
         session.add(OAuthRequest(state_hash=digest(state), session_id=row.id, expires_at=int(time.time()) + 600))
         session.commit()
@@ -253,7 +241,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             }
         )
         response = RedirectResponse(TikTokClient.AUTHORIZE + "?" + query, status_code=302)
-        issue_cookies(response, raw, csrf)
+        if new_cookie_values:
+            issue_cookies(response, *new_cookie_values)
         return response
 
     @app.get("/tiktok/callback")
