@@ -43,6 +43,7 @@ Affiliate Analytics
 - [TikTok Media Transfer Contract](docs/TIKTOK_MEDIA_TRANSFER.md) — official FILE_UPLOAD chunking, upload destinations, tests and remaining real Sandbox evidence.
 - [Operations](docs/OPERATIONS.md)
 - [Production Gates](docs/PRODUCTION_GATES.md)
+- [Release Protection](docs/RELEASE_PROTECTION.md) — branch/ruleset requirements, SBOM/vulnerability scan and artifact provenance release gate.
 - [Migrations](docs/MIGRATIONS.md)
 
 ## Stack
