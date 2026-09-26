@@ -97,6 +97,18 @@ class TikTokClient:
             },
         )
 
+    async def user_info(self, access_token: str) -> dict:
+        """Fetch only the basic profile fields authorized by user.info.basic."""
+        payload = await self._request(
+            "GET",
+            self.API + "/v2/user/info/?fields=open_id,avatar_url,display_name",
+            token=access_token,
+        )
+        user = payload.get("data", {}).get("user")
+        if not isinstance(user, dict):
+            raise HTTPException(502, "TikTok returned invalid basic profile data")
+        return user
+
     async def creator_info(self, access_token: str) -> dict:
         payload = await self._request(
             "POST", self.API + "/v2/post/publish/creator_info/query/", token=access_token, data={}
