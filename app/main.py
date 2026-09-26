@@ -30,6 +30,7 @@ from app.db import (
 )
 from app.security import TokenCipher, browser_session, digest, new_browser_session, require_csrf
 from app.tiktok import TikTokClient
+from app.i18n.routes import router as i18n_router
 
 WEB = Path(__file__).resolve().parent.parent / "web"
 COOKIE = "zttato_session"
@@ -88,6 +89,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     validate_host_config(s)
     app = FastAPI(title="zTTato Creator", docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=list(s.allowed_hosts))
+    app.include_router(i18n_router)
     app.mount("/assets", StaticFiles(directory=WEB), name="assets")
     Path(s.media_dir).mkdir(parents=True, exist_ok=True)
     if s.database_url.startswith("sqlite:///"):

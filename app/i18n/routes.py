@@ -23,14 +23,11 @@ async def get_translations(locale: str):
     return FileResponse(
         file_path,
         media_type="application/json",
-        headers={"Cache-Control": "public, max-age=86400"}  # Cache for 24 hours
+        headers={"Cache-Control": "public, max-age=86400"},  # Cache for 24 hours
     )
 
 
 @router.get("/locales")
 async def get_supported_locales():
     """Get list of supported locales."""
-    return {
-        "supported": ["en", "th", "zh", "ja", "ko", "vi"],
-        "default": "en"
-    }
+    return {"supported": ["en", "th", "zh", "ja", "ko", "vi"], "default": "en"}

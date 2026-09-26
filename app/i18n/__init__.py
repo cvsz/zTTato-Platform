@@ -1,10 +1,8 @@
 """Internationalization (i18n) utilities for zTTato."""
 
 import json
-import os
 from pathlib import Path
 from typing import Any, Dict, Optional
-from functools import lru_cache
 
 
 I18N_DIR = Path(__file__).parent / "i18n"
