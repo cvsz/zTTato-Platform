@@ -1,0 +1,277 @@
+{
+  "app": {
+    "name": "zTTato Creator",
+    "tagline": "Video của bạn, lựa chọn của bạn, tài khoản của bạn"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "review": "Đánh giá",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản"
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển người tạo",
+    "subtitle": "Không tải lên hoặc phát hành gì nếu không có sự xác nhận rõ ràng của bạn. Mật khẩu TikTok chỉ được nhập trên trang ủy quyền chính thức của TikTok.",
+    "connection": {
+      "title": "1 · Kết nối TikTok",
+      "loading": "Đang tải phiên của bạn…",
+      "connected": "Tài khoản TikTok của bạn đã được kết nối.",
+      "disconnected": "Kết nối tài khoản TikTok để bắt đầu.",
+      "scopes": "Quyền đã cấp: {scopes}",
+      "no_scopes": "Sử dụng trang đồng ý chính thức của TikTok."
+    },
+    "creator": {
+      "connected": "Đã kết nối: {name}",
+      "unauthenticated": "Ứng dụng chưa được duyệt: Đăng trực tiếp giới hạn ở Chỉ tôi.",
+      "max_duration": "Thời lượng video tối đa: {seconds} giây"
+    },
+    "video": {
+      "title": "2 · Chuẩn bị video của bạn",
+      "file_label": "Tệp MP4 (tối đa 64 MiB)",
+      "file_help": "Phiên bản này chỉ hỗ trợ tệp MP4. Không tải lên nội dung nhạy cảm.",
+      "upload_button": "Tải lên không gian làm việc zTTato",
+      "caption_label": "Chú thích (tối đa 2,200 ký tự)",
+      "caption_placeholder": "Viết chú thích của bạn ở đây",
+      "publishing_method": "Phương thức đăng",
+      "draft": "Tải lên bản nháp · bạn hoàn tất bài đăng trong TikTok",
+      "direct": "Đăng trực tiếp · gửi ngay sau khi xác nhận",
+      "privacy_label": "Khả năng nhìn thấy của TikTok (tùy chọn tài khoản hiện tại)",
+      "privacy_loading": "Đang truy vấn TikTok…",
+      "creator_interactions": "Cài đặt tương tác của người tạo",
+      "disable_comments": "Tắt bình luận",
+      "disable_duet": "Tắt Duet",
+      "disable_stitch": "Tắt Stitch",
+      "content_disclosure": "Công bố nội dung",
+      "own_brand": "Video này quảng cáo doanh nghiệp của tôi",
+      "paid_brand": "Video này là hợp tác có trả phí",
+      "ai_content": "Video này chứa nội dung do AI tạo"
+    },
+    "photo": {
+      "title": "2b · Chuẩn bị ảnh (Đăng ảnh)",
+      "note": "Tải lên tối đa 35 ảnh qua URL HTTPS. Mỗi ảnh phải truy cập được mà không cần đăng nhập.",
+      "urls_label": "URL ảnh (mỗi dòng 1 URL, tối đa 35, chỉ HTTPS)",
+      "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+      "photo_help": "Hỗ trợ JPEG/WebP. Tối đa 35 ảnh. URL phải công khai và dùng HTTPS.",
+      "upload_button": "Chuẩn bị bộ ảnh",
+      "caption_label": "Chú thích (tối đa 4,000 ký tự cho ảnh)",
+      "caption_placeholder": "Nhập chú thích tại đây",
+      "cover_label": "Chỉ số ảnh bìa (0-based)",
+      "publishing_method": "Phương thức đăng",
+      "photo_draft": "Tải lên bản nháp · bạn hoàn tất bài đăng trong TikTok",
+      "photo_direct": "Đăng trực tiếp · gửi ngay sau khi xác nhận",
+      "photo_privacy": "Khả năng nhìn thấy của TikTok (tùy chọn tài khoản hiện tại)",
+      "photo_privacy_loading": "Đang truy vấn TikTok…",
+      "photo_interactions": "Cài đặt tương tác của người tạo",
+      "photo_disable_comments": "Tắt bình luận",
+      "photo_disable_duet": "Tắt Duet",
+      "photo_disable_stitch": "Tắt Stitch",
+      "photo_disclosure": "Công bố nội dung",
+      "photo_own_brand": "Video này quảng cáo doanh nghiệp của tôi",
+      "photo_paid_brand": "Video này là đối tác trả phí",
+      "photo_ai_content": "Video này chứa nội dung do AI tạo"
+    },
+    "review": {
+      "title": "3 · Xem xét và xác nhận",
+      "summary_video": "Video đã sẵn sàng ",
+      "summary_photo": "Bộ ảnh đã sẵn sàng ",
+      "summary_none": "Tải lên nội dung trước ",
+      "summary_draft": "Video vào hộp thư TikTok, bạn hoàn tất chỉnh sửa và đăng.",
+      "summary_direct": "Đăng trực tiếp dùng cài đặt hiển thị hiện tại của TikTok và các mục đã tích.",
+      "summary_none_media": "Tải lên nội dung trước ",
+      "confirmation": "Không chuyển gì cho đến khi bạn xác nhận.",
+      "consent": "Tôi đã xem nội dung đã chọn, cài đặt quyền riêng tư và các công bố. Tôi đồng ý rõ ràng gửi nội dung này đến TikTok.",
+      "publish_button": "Gửi đến TikTok",
+      "note": "Bản nháp: hoàn tất đăng từ hộp thư TikTok. Trực tiếp: TikTok xử lý bài đăng và áp dụng giới hạn tài khoản/API.",
+      "status": "Chưa gửi nội dung.",
+      "refresh": "Làm mới trạng thái TikTok"
+    },
+    "account": {
+      "title": "Kiểm soát tài khoản",
+      "delete": "Xóa dữ liệu tài khoản zTTato",
+      "disconnect_note": "Ngắt kết nối thu hồi quyền TikTok. Xóa xóa token cục bộ và tệp đã tải lên. Nếu TikTok không thể thu hồi, hãy thu hồi zTTato trong cài đặt tài khoản TikTok."
+    }
+  },
+  "creator": {
+    "connected": "Đã kết nối: {name}",
+    "unauthenticated": "Ứng dụng chưa được duyệt: Đăng trực tiếp giới hạn ở Chỉ tôi.",
+    "max_duration": "Thời lượng video tối đa: {seconds} giây",
+    "nickname": "Người tạo TikTok",
+    "avatar_alt": "Người tạo TikTok",
+    "message_unavailable": "Không thể tải tùy chọn người tạo: {error}",
+    "direct_post_scope": "Đăng trực tiếp cần phạm vi video.publish. Kết nối lại TikTok với quyền này.",
+    "connected_prefix": "Đã kết nối: "
+  },
+  "video": {
+    "file_label": "Tệp MP4 (tối đa 64 MiB)",
+    "file_help": "Phiên bản này chỉ hỗ trợ tệp MP4. Không tải lên nội dung nhạy cảm.",
+    "upload_button": "Tải lên không gian làm việc zTTato",
+    "size_ready": "{filename} · {size} MiB sẵn sàng",
+    "uploading": "Đang tải lên không gian làm việc zTTato…",
+    "error_size": "Video phải là MP4 dưới 64 MiB",
+    "error_format": "Video phải là tệp MP4",
+    "uploading_text": "Đang tải lên không gian làm việc zTTato…",
+    "ready_text": "{filename} · {size} MiB sẵn sàng"
+  },
+  "photo": {
+    "urls_label": "URL ảnh (mỗi dòng 1 URL, tối đa 35, chỉ HTTPS)",
+    "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+    "help": "Hỗ trợ JPEG/WebP. Tối đa 35 ảnh. URL phải công khai và dùng HTTPS.",
+    "upload_button": "Chuẩn bị bộ ảnh",
+    "caption_label": "Chú thích (tối đa 4,000 ký tự cho ảnh)",
+    "caption_placeholder": "Nhập chú thích tại đây",
+    "cover_label": "Chỉ số ảnh bìa (0-based)",
+    "upload_button": "Chuẩn bị bộ ảnh",
+    "max_photos": "Tối đa 35 ảnh",
+    "https_required": "Tất cả URL phải dùng HTTPS",
+    "cover_index": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "caption_length": "Chú thích vượt quá 4,000 ký tự",
+    "preparing": "Đang chuẩn bị bộ ảnh…",
+    "ready": "{filename} · {count} ảnh sẵn sàng.",
+    "error_urls": "Vui lòng nhập ít nhất 1 URL ảnh",
+    "error_max": "Tối đa 35 ảnh",
+    "error_https": "Tất cả URL phải dùng HTTPS",
+    "error_cover": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "error_caption": "Chú thích vượt quá 4,000 ký tự",
+    "error_urls": "Vui lòng nhập ít nhất 1 URL ảnh",
+    "error_https": "Tất cả URL phải dùng HTTPS",
+    "error_cover": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "error_caption": "Chú thích vượt quá 4,000 ký tự"
+  },
+  "publish": {
+    "consent_required": "Cần xác nhận rõ ràng",
+    "mode_required": "Chọn draft hoặc direct",
+    "sending": "Đang gửi yêu cầu xác nhận đến TikTok…",
+    "success": "{status} · {note}",
+    "idempotent": " (yêu cầu trùng lặp, không trùng lặp)",
+    "error": "Yêu cầu không được xác nhận: {error}. Nếu kết quả không chắc chắn, hãy thử lại với cùng khóa yêu cầu hoặc liên hệ hỗ trợ.",
+    "status_updates": "{status}",
+    "status_with_reason": "{status} · {reason}",
+    "error_refresh": "Yêu cầu không được xác nhận: {error} Nếu kết quả không chắc chắn, hãy thử lại với cùng khóa yêu cầu hoặc liên hệ hỗ trợ."
+  },
+  "status": {
+    "uploading": "Đang tải lên không gian làm việc zTTato…",
+    "preparing_photos": "Đang chuẩn bị bộ ảnh…",
+    "sending": "Đang gửi yêu cầu xác nhận đến TikTok…",
+    "preparing_photos_2": "Đang chuẩn bị bộ ảnh…",
+    "photos_ready": "{filename} · {count} ảnh sẵn sàng.",
+    "video_ready": "{filename} · {size} MiB sẵn sàng.",
+    "no_content": "Không có nội dung được gửi.",
+    "uploading_workspace": "Đang tải lên không gian làm việc zTTato…"
+  },
+  "errors": {
+    "session_expired": "Phiên hết hạn. Tải lại bảng điều khiển.",
+    "request_failed": "Yêu cầu thất bại ({status})",
+    "request_rejected": "Yêu cầu bị từ chối",
+    "upload_failed": "Tải lên thất bại: {error}",
+    "video_required": "Tải video lên trước",
+    "photo_required": "Tải ảnh lên trước",
+    "consent_required": "Cần xác nhận rõ ràng",
+    "invalid_mode": "Chọn draft hoặc direct",
+    "max_photos": "Tối đa 35 ảnh",
+    "https_required": "Tất cả URL phải dùng HTTPS",
+    "cover_invalid": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "caption_too_long": "Chú thích vượt quá 4,000 ký tự",
+    "photo_required": "Tải ảnh lên trước",
+    "invalid_mode": "Chọn draft hoặc direct",
+    "max_photos": "Tối đa 35 ảnh",
+    "https_required": "Tất cả URL phải dùng HTTPS",
+    "cover_invalid": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "caption_too_long": "Chú thích vượt quá 4,000 ký tự",
+    "photo_required": "Tải ảnh lên trước",
+    "invalid_mode": "Chọn draft hoặc direct",
+    "max_photos": "Tối đa 35 ảnh",
+    "https_required": "Tất cả URL phải dùng HTTPS",
+    "cover_invalid": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "caption_too_long": "Chú thích vượt quá 4,000 ký tự",
+    "photo_required": "Tải ảnh lên trước",
+    "invalid_mode": "Chọn draft hoặc direct",
+    "max_photos": "Tối đa 35 ảnh",
+    "https_required": "Tất cả URL phải dùng HTTPS",
+    "cover_invalid": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "caption_too_long": "Chú thích vượt quá 4,000 ký tự",
+    "photo_required": "Tải ảnh lên trước",
+    "invalid_mode": "Chọn draft hoặc direct",
+    "max_photos": "Tối đa 35 ảnh",
+    "https_required": "Tất cả URL phải dùng HTTPS",
+    "cover_invalid": "Chỉ số bìa phải là số nguyên hợp lệ",
+    "caption_too_long": "Chú thích vượt quá 4,000 ký tự",
+    "photo_required": "Tải ảnh lên trước",
+    "idempotent_replay": " (yêu cầu trùng lặp, không trùng lặp)",
+    "error_unknown": "Yêu cầu thất bại ({status})"
+  },
+  "creator_info": {
+    "connected": "Đã kết nối: {name}",
+    "unauthenticated": "Ứng dụng chưa được duyệt: Đăng trực tiếp giới hạn ở Chỉ tôi.",
+    "max_duration": "Thời lượng video tối đa: {seconds} giây",
+    "nickname": "Người tạo TikTok",
+    "avatar_alt": "Người tạo TikTok",
+    "message_unavailable": "Không thể tải tùy chọn người tạo: {error}",
+    "direct_post_scope": "Đăng trực tiếp cần phạm vi video.publish. Kết nối lại TikTok với quyền này.",
+    "connected_prefix": "Đã kết nối: "
+  },
+  "privacy": {
+    "PUBLIC_TO_EVERYONE": "Mọi người",
+    "MUTUAL_FOLLOW_FRIENDS": "Bạn bè tương follow",
+    "FOLLOWER_OF_CREATOR": "Người theo dõi",
+    "SELF_ONLY": "Chỉ tôi"
+  },
+  "account": {
+    "title": "Kiểm soát tài khoản",
+    "delete": "Xóa dữ liệu tài khoản zTTato",
+    "disconnect_note": "Ngắt kết nối thu hồi quyền TikTok. Xóa xóa token cục bộ và tệp đã tải lên. Nếu TikTok không thể thu hồi, hãy thu hồi zTTato trong cài đặt tài khoản TikTok."
+  },
+  "landing": {
+    "title": "zTTato Creator",
+    "description": "Kết nối TikTok, chuẩn bị nội dung video, và chọn tải lên bản nháp hoặc đăng trực tiếp với sự đồng ý rõ ràng.",
+    "hero": {
+      "eyebrow": "CREATE · REVIEW · SHARE",
+      "headline": "Video của bạn, lựa chọn của bạn, tài khoản của bạn",
+      "subheadline": "Kết nối tài khoản TikTok qua TikTok Login Kit, xem lại video và cài đặt đăng, sau đó chọn rõ ràng tải lên bản nháp hoặc đăng trực tiếp."
+    },
+    "features": {
+      "connect": {
+        "title": "01 / CONNECT",
+        "title_text": "Xác thực với TikTok",
+        "description": "Xác thực xảy ra trên TikTok. zTTato không bao giờ yêu cầu mật khẩu TikTok của bạn."
+      },
+      "prepare": {
+        "title": "02 / PREPARE",
+        "title_text": "Xem lại trước khi chuyển",
+        "description": "Chọn MP4 và xem lại chú thích, khả năng nhìn thấy và các điều khiển dành cho người tạo trước khi gửi bất cứ thứ gì."
+      },
+      "confirm": {
+        "title": "03 / CONFIRM",
+        "title_text": "Đồng ý rõ ràng",
+        "description": "Không có gì được chuyển cho đến khi bạn xác nhận. Tải lên bản nháp và Đăng trực tiếp là các lựa chọn riêng biệt."
+      }
+    },
+    "actions": {
+      "connect": "Tiếp tục với TikTok",
+      "dashboard": "Bảng điều khiển người tạo",
+      "review": "Hướng dẫn xem lại"
+    },
+    "footer": {
+      "privacy": "Chính sách quyền riêng tư",
+      "terms": "Điều khoản dịch vụ"
+    }
+  },
+  "common": {
+    "loading": "Đang tải…",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "submit": "Gửi",
+    "yes": "Có",
+    "no": "Không",
+    "ok": "OK",
+    "retry": "Thử lại",
+    "close": "Đóng"
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "app": {
+    "name": "zTTato Creator",
+    "tagline": "Your video, your choice, your account."
+  },
+  "nav": {
+    "home": "Home",
+    "review": "Review",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "dashboard": {
+    "title": "Creator dashboard",
+    "subtitle": "Nothing uploads or publishes without your explicit confirmation. Your TikTok password is entered only on TikTok's own authorization page.",
+    "connection": {
+      "title": "1 · TikTok connection",
+      "loading": "Loading your session…",
+      "connected": "Your TikTok account is connected.",
+      "disconnected": "Connect your TikTok account to start.",
+      "scopes": "Granted scopes: {scopes}",
+      "no_scopes": "Authorization uses the official TikTok consent page."
+    },
+    "creator": {
+      "connected": "Connected: {name}",
+      "unauthenticated": "Unaudited app: Direct Post is limited to Only me.",
+      "max_duration": "Max video duration: {seconds} seconds"
+    },
+    "video": {
+      "title": "2 · Prepare your video",
+      "file_label": "MP4 file (up to 64 MiB)",
+      "file_help": "Only MP4 files are supported in this version. Never upload sensitive content.",
+      "upload_button": "Upload to zTTato workspace",
+      "caption_label": "Caption (maximum 2,200 characters)",
+      "caption_placeholder": "Write your caption here",
+      "publishing_method": "Publishing method",
+      "draft": "Upload as Draft · you finish the post in TikTok",
+      "direct": "Direct Post · send directly after confirmation",
+      "privacy_label": "TikTok visibility (current account choices)",
+      "privacy_loading": "Querying TikTok…",
+      "creator_interactions": "Creator interaction settings",
+      "disable_comments": "Disable comments",
+      "disable_duet": "Disable Duet",
+      "disable_stitch": "Disable Stitch",
+      "content_disclosure": "Content disclosure",
+      "own_brand": "This video promotes my own business",
+      "paid_brand": "This video is a paid partnership",
+      "ai_content": "This video contains AI-generated content"
+    },
+    "photo": {
+      "title": "2b · Prepare photos (Photo Post)",
+      "note": "Upload up to 35 photos via HTTPS URLs. Each photo must be accessible without authentication.",
+      "urls_label": "Photo URLs (one per line, max 35, HTTPS only)",
+      "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+      "photo_help": "JPEG/WebP supported. Max 35 photos. URLs must be publicly accessible and use HTTPS.",
+      "upload_button": "Prepare photo set",
+      "caption_label": "Caption (maximum 4,000 characters for photos)",
+      "caption_placeholder": "Write your caption here",
+      "cover_label": "Cover photo index (0-based)",
+      "publishing_method": "Publishing method",
+      "photo_draft": "Upload as Draft · you finish the post in TikTok",
+      "photo_direct": "Direct Post · send directly after confirmation",
+      "photo_privacy": "TikTok visibility (current account choices)",
+      "photo_privacy_loading": "Querying TikTok…",
+      "photo_interactions": "Creator interaction settings",
+      "photo_disable_comments": "Disable comments",
+      "photo_disable_duet": "Disable Duet",
+      "photo_disable_stitch": "Disable Stitch",
+      "photo_disclosure": "Content disclosure",
+      "photo_own_brand": "This video promotes my own business",
+      "photo_paid_brand": "This video is a paid partnership",
+      "photo_ai_content": "This video contains AI-generated content"
+    },
+    "review": {
+      "title": "3 · Review and confirm",
+      "summary_video": "A video is ready. ",
+      "summary_photo": "A photo set is ready. ",
+      "summary_none": "Upload media first. ",
+      "summary_draft": "The video goes to your TikTok inbox, where you finish editing and posting.",
+      "summary_direct": "Direct Post will use the current TikTok visibility setting and any checked disclosures.",
+      "summary_none_media": "Upload media first. ",
+      "confirmation": "No transfer occurs until you confirm.",
+      "consent": "I reviewed the selected content, privacy setting and disclosures. I expressly consent to sending this to TikTok.",
+      "publish_button": "Send to TikTok",
+      "note": "Draft: finish posting from TikTok inbox. Direct: TikTok processes the post and applies account/API restrictions.",
+      "status": "No content sent.",
+      "refresh": "Refresh TikTok status"
+    },
+    "account": {
+      "title": "Account controls",
+      "delete": "Delete zTTato account data",
+      "disconnect_note": "Disconnect revokes TikTok authorization. Delete removes local tokens and uploaded files. If TikTok revocation is unavailable, also revoke zTTato in your TikTok account settings."
+    }
+  },
+  "creator": {
+    "connected": "Connected: {name}",
+    "unauthenticated": "Unaudited app: Direct Post is limited to Only me.",
+    "max_duration": "Max video duration: {seconds} seconds",
+    "nickname": "TikTok creator",
+    "avatar_alt": "TikTok creator",
+    "message_unavailable": "Creator options unavailable: {error}",
+    "direct_post_scope": "Direct Post requires the video.publish scope. Reconnect TikTok with this permission.",
+    "connected_prefix": "Connected: "
+  },
+  "video": {
+    "file_label": "MP4 file (up to 64 MiB)",
+    "file_help": "Only MP4 files are supported in this version. Never upload sensitive content.",
+    "upload_button": "Upload to zTTato workspace",
+    "size_ready": "{filename} · {size} MiB is ready.",
+    "uploading": "Uploading to your zTTato workspace…",
+    "error_size": "The video must be an MP4 under 64 MiB.",
+    "error_format": "The video must be an MP4 file.",
+    "uploading_text": "Uploading to your zTTato workspace…",
+    "ready_text": "{filename} · {size} MiB is ready."
+  },
+  "photo": {
+    "urls_label": "Photo URLs (one per line, max 35, HTTPS only)",
+    "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+    "help": "JPEG/WebP supported. Max 35 photos. URLs must be publicly accessible and use HTTPS.",
+    "upload_button": "Prepare photo set",
+    "caption_label": "Caption (maximum 4,000 characters for photos)",
+    "caption_placeholder": "Write your caption here",
+    "cover_label": "Cover photo index (0-based)",
+    "upload_button": "Prepare photo set",
+    "max_photos": "Maximum 35 photos allowed.",
+    "https_required": "All URLs must use HTTPS.",
+    "cover_index": "Cover index must be a valid integer.",
+    "caption_length": "Caption exceeds 4000 characters.",
+    "preparing": "Preparing photo set…",
+    "ready": "{filename} · {count} photos ready.",
+    "error_urls": "Please enter at least one photo URL.",
+    "error_max": "Maximum 35 photos allowed.",
+    "error_https": "All URLs must use HTTPS.",
+    "error_cover": "Cover index must be a valid integer.",
+    "error_caption": "Caption exceeds 4000 characters."
+  },
+  "publish": {
+    "consent_required": "Explicit confirmation is required",
+    "mode_required": "Choose draft or direct",
+    "sending": "Sending your confirmed request to TikTok…",
+    "success": "{status} · {note}",
+    "idempotent": " (same request, not duplicated)",
+    "error": "Request not confirmed: {error}. If the result is uncertain, retry with the same request key or contact support.",
+    "status_updates": "{status}",
+    "status_with_reason": "{status} · {reason}",
+    "error_refresh": "Request not confirmed: {error}. If the result is uncertain, retry with the same request key or contact support."
+  },
+  "status": {
+    "uploading": "Uploading to your zTTato workspace…",
+    "preparing_photos": "Preparing photo set…",
+    "sending": "Sending your confirmed request to TikTok…",
+    "preparing_photos_2": "Preparing photo set…",
+    "photos_ready": "{filename} · {count} photos ready.",
+    "video_ready": "{filename} · {size} MiB is ready.",
+    "no_content": "No content sent.",
+    "uploading_workspace": "Uploading to your zTTato workspace…"
+  },
+  "errors": {
+    "session_expired": "Session expired. Reload the dashboard.",
+    "request_failed": "Request failed ({status})",
+    "request_rejected": "Request rejected.",
+    "upload_failed": "Upload failed: {error}",
+    "video_required": "Upload a video first",
+    "photo_required": "Upload photos first",
+    "consent_required": "Explicit confirmation is required",
+    "invalid_mode": "Choose draft or direct",
+    "max_photos": "Maximum 35 photos allowed",
+    "https_required": "All URLs must use HTTPS",
+    "cover_invalid": "Cover index must be a valid integer",
+    "caption_too_long": "Caption exceeds 4000 characters",
+    "photo_urls_required": "Please enter at least one photo URL",
+    "photo_https": "All URLs must use HTTPS",
+    "photo_cover_invalid": "Cover index must be a valid integer",
+    "caption_too_long_photo": "Caption exceeds 4000 characters",
+    "photo_urls_empty": "Please enter at least one photo URL",
+    "photo_https_required": "Photo URLs must use HTTPS",
+    "photo_cover_invalid": "Cover index must be a valid integer",
+    "caption_too_long": "Caption exceeds 4000 characters",
+    "idempotent_replay": " (same request, not duplicated)",
+    "error_unknown": "Request failed ({status})"
+  },
+  "creator_info": {
+    "connected": "Connected: {name}",
+    "unauthenticated": "Unaudited app: Direct Post is limited to Only me.",
+    "max_duration": "Max video duration: {seconds} seconds",
+    "nickname": "TikTok creator",
+    "avatar_alt": "TikTok creator",
+    "message_unavailable": "Creator options unavailable: {error}",
+    "direct_post_scope": "Direct Post requires the video.publish scope. Reconnect TikTok with this permission.",
+    "connected_prefix": "Connected: "
+  },
+  "privacy": {
+    "PUBLIC_TO_EVERYONE": "Everyone",
+    "MUTUAL_FOLLOW_FRIENDS": "Friends (mutual follows)",
+    "FOLLOWER_OF_CREATOR": "Followers",
+    "SELF_ONLY": "Only me"
+  },
+  "account": {
+    "title": "Account controls",
+    "delete": "Delete zTTato account data",
+    "disconnect_note": "Disconnect revokes TikTok authorization. Delete removes local tokens and uploaded files. If TikTok revocation is unavailable, also revoke zTTato in your TikTok account settings."
+  },
+  "landing": {
+    "title": "zTTato Creator",
+    "description": "Connect TikTok, prepare video content, and choose whether to upload a draft or post with explicit consent.",
+    "hero": {
+      "eyebrow": "CREATE · REVIEW · SHARE",
+      "headline": "Your video, your choice, your account.",
+      "subheadline": "Connect your TikTok account through TikTok Login Kit, review your video and post settings, then explicitly choose Upload as Draft or Direct Post."
+    },
+    "features": {
+      "connect": {
+        "title": "01 / CONNECT",
+        "title_text": "Authorize with TikTok",
+        "description": "Authorization happens on TikTok. zTTato never asks for your TikTok password."
+      },
+      "prepare": {
+        "title": "02 / PREPARE",
+        "title_text": "Review before transfer",
+        "description": "Select an MP4 and review caption, visibility and creator-specific controls before sending anything."
+      },
+      "confirm": {
+        "title": "03 / CONFIRM",
+        "title_text": "Explicit consent",
+        "description": "Nothing is transferred until you confirm. Draft upload and Direct Post are separate choices."
+      }
+    },
+    "actions": {
+      "connect": "Continue with TikTok",
+      "dashboard": "Creator dashboard",
+      "review": "Review walkthrough"
+    },
+    "footer": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "retry": "Retry",
+    "close": "Close"
+  }
+}

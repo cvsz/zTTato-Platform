@@ -1,0 +1,283 @@
+{
+  "app": {
+    "name": "zTTato Creator",
+    "tagline": "วิดีโอของคุณ ตัวเลือกของคุณ บัญชีของคุณ"
+  },
+  "nav": {
+    "home": "หน้าหลัก",
+    "review": "รีวิว",
+    "privacy": "ความเป็นส่วนตัว",
+    "terms": "ข้อกำหนด"
+  },
+  "dashboard": {
+    "title": "แดชบอร์ดผู้สร้าง",
+    "subtitle": "ไม่มีการอัปโหลดหรือเผยแพร่โดยไม่ได้รับการยืนยันชัดเจนจากคุณ รหัสผ่าน TikTok จะถูกป้อนบนหน้าการอนุญาตของ TikTok เท่านั้น",
+    "connection": {
+      "title": "1 · การเชื่อมต่อ TikTok",
+      "loading": "กำลังโหลดเซสชันของคุณ…",
+      "connected": "บัญชี TikTok ของคุณเชื่อมต่อแล้ว",
+      "disconnected": "เชื่อมต่อบัญชี TikTok เพื่อเริ่มต้น",
+      "scopes": "สิทธิ์ที่อนุญาต: {scopes}",
+      "no_scopes": "ใช้หน้าการอนุญาตอย่างเป็นทางการของ TikTok"
+    },
+    "creator": {
+      "connected": "เชื่อมต่อแล้ว: {name}",
+      "unauthenticated": "แอปที่ยังไม่ผ่านการตรวจสอบ: Direct Post จำกัดเฉพาะ Only me เท่านั้น",
+      "max_duration": "ระยะเวลาวิดีโอสูงสุด: {seconds} วินาที"
+    },
+    "video": {
+      "title": "2 · เตรียมวิดีโอของคุณ",
+      "file_label": "ไฟล์ MP4 (สูงสุด 64 MiB)",
+      "file_help": "รองรับเฉพาะไฟล์ MP4 ในเวอร์ชันนี้ ห้ามอัปโหลดเนื้อหาที่ละเอียดอ่อน",
+      "upload_button": "อัปโหลดไปยังพื้นที่ทำงาน zTTato",
+      "caption_label": "แคปชัน (สูงสุด 2,200 ตัวอักษร)",
+      "caption_placeholder": "เขียนแคปชันของคุณที่นี่",
+      "publishing_method": "วิธีการเผยแพร่",
+      "draft": "อัปโหลดแบบดรอฟท์ · คุณดำเนินการต่อใน TikTok เอง",
+      "direct": "โพสต์โดยตรง · ส่งทันทีหลังยืนยัน",
+      "privacy_label": "การมองเห็นของ TikTok (ตัวเลือกของบัญชีปัจจุบัน)",
+      "privacy_loading": "กำลังโหลดจาก TikTok…",
+      "creator_interactions": "การตั้งค่าการโต้ตอบของผู้สร้าง",
+      "disable_comments": "ปิดความคิดเห็น",
+      "disable_duet": "ปิด Duet",
+      "disable_stitch": "ปิด Stitch",
+      "content_disclosure": "การเปิดเผยเนื้อหา",
+      "own_brand": "วิดีโอนี้ส่งเสริมธุรกิจของฉันเอง",
+      "paid_brand": "วิดีโอนี้เป็นพาร์ทเนอร์ชิพแบบมีค่าตอบแทน",
+      "ai_content": "วิดีโอนี้มีเนื้อหาที่สร้างโดย AI"
+    },
+    "photo": {
+      "title": "2b · เตรียมรูปภาพ (Photo Post)",
+      "note": "อัปโหลดได้สูงสุด 35 รูปผ่าน URL HTTPS แต่ละรูปต้องเข้าถึงได้โดยไม่ต้องเข้าสู่ระบบ",
+      "urls_label": "URL รูปภาพ (บรรทัดละ 1 URL, สูงสุด 35, HTTPS เท่านั้น)",
+      "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+      "photo_help": "รองรับ JPEG/WebP สูงสุด 35 รูป URL ต้องเข้าถึงได้สาธารณะและใช้ HTTPS",
+      "upload_button": "เตรียมชุดรูปภาพ",
+      "caption_label": "แคปชัน (สูงสุด 4,000 ตัวอักษรสำหรับรูปภาพ)",
+      "caption_placeholder": "เขียนแคปชันของคุณที่นี่",
+      "cover_label": "ดัชนีรูปปก (เริ่มจาก 0)",
+      "publishing_method": "วิธีการเผยแพร่",
+      "photo_draft": "อัปโหลดแบบดรอฟท์ · คุณดำเนินการต่อใน TikTok เอง",
+      "photo_direct": "โพสต์โดยตรง · ส่งทันทีหลังยืนยัน",
+      "photo_privacy": "การมองเห็นของ TikTok (ตัวเลือกของบัญชีปัจจุบัน)",
+      "photo_privacy_loading": "กำลังโหลดจาก TikTok…",
+      "photo_interactions": "การตั้งค่าการโต้ตอบของผู้สร้าง",
+      "photo_disable_comments": "ปิดความคิดเห็น",
+      "photo_disable_duet": "ปิด Duet",
+      "photo_disable_stitch": "ปิด Stitch",
+      "photo_disclosure": "การเปิดเผยเนื้อหา",
+      "photo_own_brand": "วิดีโอนี้ส่งเสริมธุรกิจของฉันเอง",
+      "photo_paid_brand": "วิดีโอนี้เป็นพาร์ทเนอร์ชิพแบบมีค่าตอบแทน",
+      "photo_ai_content": "วิดีโอนี้มีเนื้อหาที่สร้างโดย AI"
+    },
+    "review": {
+      "title": "3 \u00b7 ตรวจสอบและยืนยัน",
+      "summary_video": "วิดีโอพร้อมแล้ว ",
+      "summary_photo": "ชุดรูปภาพพร้อมแล้ว ",
+      "summary_none": "อัปโหลดสื่อก่อน ",
+      "summary_draft": "วิดีโอจะไปที่กล่องขาเข้า TikTok ของคุณ โดยคุณแก้ไขและโพสต์ต่อเอง",
+      "summary_direct": "Direct Post จะใช้การตั้งค่าการมองเห็นปัจจุบันของ TikTok และการเปิดเผยที่ติ๊กไว้",
+      "summary_none_media": "อัปโหลดสื่อก่อน ",
+      "confirmation": "ไม่มีการส่งข้อมูลจนกว่าคุณจะยืนยัน",
+      "consent": "ฉันได้ตรวจสอบเนื้อหาที่เลือก การตั้งค่าความเป็นส่วนตัว และการเปิดเผยข้อมูลแล้ว ฉันยินยอมอย่างชัดเจนที่จะส่งเนื้อหานี้ไปยัง TikTok",
+      "publish_button": "ส่งไปยัง TikTok",
+      "note": "ดรอฟท์: เสร็จสิ้นการโพสต์จากกล่องขาเข้า TikTok โดยตรง: TikTok ประมวลผลโพสต์และใช้ข้อจำกัดของบัญชี/API",
+      "status": "ยังไม่มีการส่งเนื้อหา",
+      "refresh": "รีเฟรชสถานะ TikTok"
+    },
+    "account": {
+      "title": "การควบคุมบัญชี",
+      "delete": "ลบข้อมูลบัญชี zTTato",
+      "disconnect_note": "Disconnect เพิกถอนการอนุญาต TikTok Delete ลบโทเค็นท้องถิ่นและไฟล์ที่อัปโหลด หาก TikTok ไม่สามารถเพิกถอนได้ ให้เพิกถอน zTTato ในการตั้งค่าบัญชี TikTok ด้วย"
+    }
+  },
+  "creator": {
+    "connected": "เชื่อมต่อแล้ว: {name}",
+    "unauthenticated": "แอปที่ยังไม่ผ่านการตรวจสอบ: Direct Post จำกัดเฉพาะ Only me เท่านั้น",
+    "max_duration": "ระยะเวลาวิดีโอสูงสุด: {seconds} วินาที",
+    "nickname": "ผู้สร้าง TikTok",
+    "avatar_alt": "ผู้สร้าง TikTok",
+    "message_unavailable": "ไม่สามารถโหลดตัวเลือกผู้สร้างได้: {error}",
+    "direct_post_scope": "Direct Post ต้องการสกัด video.publish โปรดเชื่อมต่อ TikTok ใหม่พร้อมสิทธิ์นี้",
+    "connected_prefix": "เชื่อมต่อแล้ว: "
+  },
+  "video": {
+    "file_label": "ไฟล์ MP4 (สูงสุด 64 MiB)",
+    "file_help": "รองรับเฉพาะไฟล์ MP4 ในเวอร์ชันนี้ ห้ามอัปโหลดเนื้อหาที่ละเอียดอ่อน",
+    "upload_button": "อัปโหลดไปยังพื้นที่ทำงาน zTTato",
+    "size_ready": "{filename} · {size} MiB พร้อมใช้งาน",
+    "uploading": "กำลังอัปโหลดไปยังพื้นที่ทำงาน zTTato…",
+    "error_size": "วิดีโอต้องเป็นไฟล์ MP4 ขนาดไม่เกิน 64 MiB",
+    "error_format": "วิดีโอต้องเป็นไฟล์ MP4",
+    "uploading_text": "กำลังอัปโหลดไปยังพื้นที่ทำงาน zTTato…",
+    "ready_text": "{filename} · {size} MiB พร้อมใช้งาน"
+  },
+  "photo": {
+    "urls_label": "URL รูปภาพ (บรรทัดละ 1 URL, สูงสุด 35, HTTPS เท่านั้น)",
+    "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+    "help": "รองรับ JPEG/WebP สูงสุด 35 รูป URL ต้องเข้าถึงได้สาธารณะและใช้ HTTPS",
+    "upload_button": "เตรียมชุดรูปภาพ",
+    "caption_label": "แคปชัน (สูงสุด 4,000 ตัวอักษรสำหรับรูปภาพ)",
+    "caption_placeholder": "เขียนแคปชันของคุณที่นี่",
+    "cover_label": "ดัชนีรูปปก (0-based)",
+    "upload_button": "เตรียมชุดรูปภาพ",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_index": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_length": "แคปชันเกิน 4,000 ตัวอักษร",
+    "preparing": "กำลังเตรียมชุดรูปภาพ…",
+    "ready": "{filename} · {count} รูปพร้อมแล้ว",
+    "error_urls": "กรุณาระบุ URL รูปภาพอย่างน้อย 1 รายการ",
+    "error_max": "สูงสุด 35 รูปเท่านั้น",
+    "error_https": "URL ทั้งหมดต้องใช้ HTTPS",
+    "error_cover": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "error_caption": "แคปชันเกิน 4,000 ตัวอักษร",
+    "error_urls": "กรุณาระบุ URL รูปภาพอย่างน้อย 1 รายการ",
+    "error_https": "URL ทั้งหมดต้องใช้ HTTPS",
+    "error_cover": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "error_caption": "แคปชันเกิน 4,000 ตัวอักษร"
+  },
+  "publish": {
+    "consent_required": "ต้องมีการยืนยันชัดเจน",
+    "mode_required": "เลือก draft หรือ direct",
+    "sending": "กำลังส่งคำขอยืนยันไปยัง TikTok…",
+    "success": "{status} · {note}",
+    "idempotent": " (คำขอซ้ำ ไม่ได้ทำซ้ำ)",
+    "error": "คำขอไม่สำเร็จ: {error} หากผลลัพธ์ไม่แน่นอน ให้ลองอีกครั้งด้วยคีย์คำขอเดิม หรือติดต่อฝ่ายสนับสนุน",
+    "status_updates": "{status}",
+    "status_with_reason": "{status} · {reason}",
+    "error_refresh": "คำขอไม่สำเร็จ: {error} หากผลลัพธ์ไม่แน่นอน ให้ลองอีกครั้งด้วยคีย์คำขอเดิม หรือติดต่อฝ่ายสนับสนุน"
+  },
+  "status": {
+    "uploading": "กำลังอัปโหลดไปยังพื้นที่ทำงาน zTTato…",
+    "preparing_photos": "กำลังเตรียมชุดรูปภาพ…",
+    "sending": "กำลังส่งคำขอยืนยันไปยัง TikTok…",
+    "preparing_photos_2": "กำลังเตรียมชุดรูปภาพ…",
+    "photos_ready": "{filename} · {count} รูปพร้อมแล้ว",
+    "video_ready": "{filename} · {size} MiB พร้อมแล้ว",
+    "no_content": "ยังไม่มีการส่งเนื้อหา",
+    "uploading_workspace": "กำลังอัปโหลดไปยังพื้นที่ทำงาน zTTato…"
+  },
+  "errors": {
+    "session_expired": "เซสชันหมดอายุ โปรดโหลดแดชบอร์ดใหม่",
+    "request_failed": "คำขอล้มเหลว ({status})",
+    "request_rejected": "คำขอถูกปฏิเสธ",
+    "upload_failed": "อัปโหลดล้มเหลว: {error}",
+    "video_required": "โปรดอัปโหลดวิดีโอก่อน",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "consent_required": "ต้องมีการยืนยันชัดเจน",
+    "invalid_mode": "เลือก draft หรือ direct",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_invalid": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_too_long": "แคปชันเกิน 4,000 ตัวอักษร",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "invalid_mode": "เลือก draft หรือ direct",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_invalid": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_too_long": "แคปชันเกิน 4,000 ตัวอักษร",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "invalid_mode": "เลือก draft หรือ direct",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_invalid": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_too_long": "แคปชันเกิน 4,000 ตัวอักษร",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "invalid_mode": "เลือก draft หรือ direct",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_invalid": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_too_long": "แคปชันเกิน 4,000 ตัวอักษร",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "invalid_mode": "เลือก draft หรือ direct",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_invalid": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_too_long": "แคปชันเกิน 4,000 ตัวอักษร",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "invalid_mode": "เลือก draft หรือ direct",
+    "max_photos": "สูงสุด 35 รูปเท่านั้น",
+    "https_required": "URL ทั้งหมดต้องใช้ HTTPS",
+    "cover_invalid": "ดัชนีรูปปกต้องเป็นตัวเลขที่ถูกต้อง",
+    "caption_too_long": "แคปชันเกิน 4,000 ตัวอักษร",
+    "photo_required": "โปรดอัปโหลดรูปภาพก่อน",
+    "idempotent_replay": " (คำขอซ้ำ ไม่ได้ทำซ้ำ)",
+    "error_unknown": "คำขอล้มเหลว ({status})"
+  },
+  "creator_info": {
+    "connected": "เชื่อมต่อแล้ว: {name}",
+    "unauthenticated": "แอปที่ยังไม่ผ่านการตรวจสอบ: Direct Post จำกัดเฉพาะ Only me เท่านั้น",
+    "max_duration": "ระยะเวลาวิดีโอสูงสุด: {seconds} วินาที",
+    "nickname": "ผู้สร้าง TikTok",
+    "avatar_alt": "ผู้สร้าง TikTok",
+    "message_unavailable": "ไม่สามารถโหลดตัวเลือกผู้สร้างได้: {error}",
+    "direct_post_scope": "Direct Post ต้องการสกัด video.publish โปรดเชื่อมต่อ TikTok ใหม่พร้อมสิทธิ์นี้",
+    "connected_prefix": "เชื่อมต่อแล้ว: "
+  },
+  "privacy": {
+    "PUBLIC_TO_EVERYONE": "ทุกคน",
+    "MUTUAL_FOLLOW_FRIENDS": "เพื่อน (ติดตามกัน)",
+    "FOLLOWER_OF_CREATOR": "ผู้ติดตาม",
+    "SELF_ONLY": "เฉพาะฉัน"
+  },
+  "account": {
+    "title": "การควบคุมบัญชี",
+    "delete": "ลบข้อมูลบัญชี zTTato",
+    "disconnect_note": "Disconnect เพิกถอนการอนุญาต TikTok Delete ลบโทเค็นท้องถิ่นและไฟล์ที่อัปโหลด หาก TikTok ไม่สามารถเพิกถอนได้ ให้เพิกถอน zTTato ในการตั้งค่าบัญชี TikTok ด้วย"
+  },
+  "landing": {
+    "title": "zTTato Creator",
+    "description": "เชื่อมต่อ TikTok จัดเตรียมเนื้อหาวิดีโอ และเลือกว่าจะอัปโหลดแบบดรอฟท์หรือโพสต์โดยตรงพร้อมการยืนยันชัดเจน",
+    "hero": {
+      "eyebrow": "CREATE · REVIEW · SHARE",
+      "headline": "วิดีโอของคุณ ตัวเลือกของคุณ บัญชีของคุณ",
+      "subheadline": "เชื่อมต่อบัญชี TikTok ผ่าน TikTok Login Kit ตรวจสอบวิดีโอและตั้งค่าการโพสต์ แล้วเลือกอย่างชัดเจนว่าจะอัปโหลดแบบดรอฟท์หรือโพสต์โดยตรง"
+    },
+    "features": {
+      "connect": {
+        "title": "01 / CONNECT",
+        "title_text": "Authorize with TikTok",
+        "description": "Authorization happens on TikTok. zTTato never asks for your TikTok password."
+      },
+      "prepare": {
+        "title": "02 / PREPARE",
+        "title_text": "Review before transfer",
+        "description": "Select an MP4 and review caption, visibility and creator-specific controls before sending anything."
+      },
+      "confirm": {
+        "title": "03 / CONFIRM",
+        "title_text": "Explicit consent",
+        "description": "Nothing is transferred until you confirm. Draft upload and Direct Post are separate choices."
+      }
+    },
+    "actions": {
+      "connect": "Continue with TikTok",
+      "dashboard": "Creator dashboard",
+      "review": "Review walkthrough"
+    },
+    "footer": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "common": {
+    "loading": "กำลังโหลด…",
+    "error": "ข้อผิดพลาด",
+    "success": "สำเร็จ",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "close": "ปิด",
+    "back": "ย้อนกลับ",
+    "next": "ถัดไป",
+    "submit": "ส่ง",
+    "yes": "ใช่",
+    "no": "ไม่ใช่",
+    "ok": "ตกลง",
+    "retry": "ลองใหม่",
+    "close": "ปิด"
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "app": {
+    "name": "zTTato Creator",
+    "tagline": "あなたの動画、あなたの選択、あなたのアカウント"
+  },
+  "nav": {
+    "home": "ホーム",
+    "review": "レビュー",
+    "privacy": "プライバシー",
+    "terms": "利用規約"
+  },
+  "dashboard": {
+    "title": "クリエイター ダッシュボード",
+    "subtitle": "明示的な確認なしでは、アップロードや公開は行われません。TikTok のパスワードは TikTok の公式認可ページでのみ入力されます。",
+    "connection": {
+      "title": "1 · TikTok 接続",
+      "loading": "セッションを読み込み中…",
+      "connected": "TikTok アカウントが接続されました。",
+      "disconnected": "TikTok アカウントを接続して開始します。",
+      "scopes": "付与されたスコープ: {scopes}",
+      "no_scopes": "TikTok の公式同意画面を使用します。"
+    },
+    "creator": {
+      "connected": "接続済み: {name}",
+      "unauthenticated": "未審査アプリ: 直接投稿は「自分のみ」に制限されます。",
+      "max_duration": "最大動画長: {seconds} 秒"
+    },
+    "video": {
+      "title": "2 · 動画を準備",
+      "file_label": "MP4 ファイル (最大 64 MiB)",
+      "file_help": "このバージョンでは MP4 ファイルのみサポートしています。機密情報をアップロードしないでください。",
+      "upload_button": "zTTato ワークスペースにアップロード",
+      "caption_label": "キャプション (最大 2,200 文字)",
+      "caption_placeholder": "キャプションを入力",
+      "publishing_method": "投稿方法",
+      "draft": "下書きとしてアップロード · TikTok で編集して投稿",
+      "direct": "直接投稿 · 確認後に直接送信",
+      "privacy_label": "TikTok 公開範囲 (アカウントの現在の選択肢)",
+      "privacy_loading": "TikTok を問い合わせ中…",
+      "creator_interactions": "クリエイターのインタラクション設定",
+      "disable_comments": "コメントを無効化",
+      "disable_duet": "Duet を無効化",
+      "disable_stitch": "Stitch を無効化",
+      "content_disclosure": "コンテンツの開示",
+      "own_brand": "この動画は自分のビジネスを宣伝するものです",
+      "paid_brand": "この動画は有料パートナーシップです",
+      "ai_content": "この動画には AI 生成コンテンツが含まれます"
+    },
+    "photo": {
+      "title": "2b · 写真を準備 (フォト投稿)",
+      "note": "HTTPS URL 経由で最大 35 枚の写真をアップロード。各写真はログインなしでアクセス可能である必要があります。",
+      "urls_label": "写真 URL (1 行に 1 つ、最大 35 個、HTTPS のみ)",
+      "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+      "photo_help": "JPEG/WebP 対応。最大 35 枚。URL は公開アクセス可能で HTTPS を使用する必要があります。",
+      "upload_button": "写真セットを準備",
+      "caption_label": "キャプション (写真最大 4,000 文字)",
+      "caption_placeholder": "キャプションを入力",
+      "cover_label": "カバー写真のインデックス (0 始まり)",
+      "publishing_method": "投稿方法",
+      "photo_draft": "下書きとしてアップロード · TikTok で投稿を完了",
+      "photo_direct": "直接投稿 · 確認後に直接送信",
+      "photo_privacy": "TikTok 公開範囲 (現在のアカウントの選択肢)",
+      "photo_privacy_loading": "TikTok を問い合わせ中…",
+      "photo_interactions": "クリエイターのインタラクション設定",
+      "photo_disable_comments": "コメントを無効化",
+      "photo_disable_duet": "Duet を無効化",
+      "photo_disable_stitch": "Stitch を無効化",
+      "photo_disclosure": "コンテンツの開示",
+      "photo_own_brand": "この動画は自分のビジネスを宣伝するものです",
+      "photo_paid_brand": "この動画は有料パートナーシップです",
+      "photo_ai_content": "この動画には AI 生成コンテンツが含まれます"
+    },
+    "review": {
+      "title": "3 · 確認と同意",
+      "summary_video": "動画の準備完了 ",
+      "summary_photo": "写真セットの準備完了 ",
+      "summary_none": "まずメディアをアップロード ",
+      "summary_draft": "動画は TikTok の受信箱に送られ、そこで編集と投稿を完了します。",
+      "summary_direct": "直接投稿では、現在の TikTok 公開設定とチェックした開示項目が使用されます。",
+      "summary_none_media": "先にメディアをアップロード ",
+      "confirmation": "確認するまで何も転送されません。",
+      "consent": "選択したコンテンツ、プライバシー設定、開示事項を確認しました。このコンテンツを TikTok に送信することに明示的に同意します。",
+      "publish_button": "TikTok に送信",
+      "note": "下書き: TikTok の受信箱で投稿を完了。直接投稿: TikTok が投稿を処理し、アカウント/API の制限を適用。",
+      "status": "コンテンツは送信されていません。",
+      "refresh": "TikTok ステータスを更新"
+    },
+    "account": {
+      "title": "アカウント管理",
+      "delete": "zTTato アカウントデータを削除",
+      "disconnect_note": "切断すると TikTok の認可が取り消されます。削除するとローカル トークンとアップロード済みファイルが削除されます。TikTok で認可を取り消せない場合は、TikTok アカウント設定で zTTato も取り消してください。"
+    }
+  },
+  "creator": {
+    "connected": "接続済み: {name}",
+    "unauthenticated": "未審査アプリ: 直接投稿は「自分のみ」に制限されます。",
+    "max_duration": "最大動画長: {seconds} 秒",
+    "nickname": "TikTok クリエイター",
+    "avatar_alt": "TikTok クリエイター",
+    "message_unavailable": "クリエイター オプションを利用できません: {error}",
+    "direct_post_scope": "直接投稿には video.publish スコープが必要です。この権限で TikTok に再接続してください。",
+    "connected_prefix": "接続済み: "
+  },
+  "video": {
+    "file_label": "MP4 ファイル (最大 64 MiB)",
+    "file_help": "このバージョンでは MP4 ファイルのみサポートしています。機密情報をアップロードしないでください。",
+    "upload_button": "zTTato ワークスペースにアップロード",
+    "size_ready": "{filename} · {size} MiB 準備完了",
+    "uploading": "zTTato ワークスペースにアップロード中…",
+    "error_size": "動画は 64 MiB 以下の MP4 ファイルでなければなりません",
+    "error_format": "動画は MP4 ファイルでなければなりません",
+    "uploading_text": "zTTato ワークスペースにアップロード中…",
+    "ready_text": "{filename} · {size} MiB 準備完了"
+  },
+  "photo": {
+    "urls_label": "写真 URL (1 行に 1 つ、最大 35 個、HTTPS のみ)",
+    "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+    "help": "JPEG/WebP 対応。最大 35 枚。URL は公開アクセス可能で HTTPS を使用する必要があります。",
+    "upload_button": "写真セットを準備",
+    "caption_label": "キャプション (写真最大 4,000 文字)",
+    "caption_placeholder": "キャプションを入力",
+    "cover_label": "カバー写真のインデックス (0 始まり)",
+    "upload_button": "写真セットを準備",
+    "max_photos": "最大 35 枚まで",
+    "https_required": "すべての URL は HTTPS を使用する必要があります",
+    "cover_index": "カバーインデックスは有効な整数でなければなりません",
+    "caption_length": "キャプションが 4,000 文字を超えています",
+    "preparing": "写真セットを準備中…",
+    "ready": "{filename} · {count} 枚の写真が準備完了。",
+    "error_urls": "少なくとも 1 枚の写真 URL を入力してください",
+    "error_max": "最大 35 枚まで",
+    "error_https": "すべての URL は HTTPS を使用する必要があります",
+    "error_cover": "カバーインデックスは有効な整数でなければなりません",
+    "error_caption": "キャプションが 4,000 文字を超えています",
+    "error_urls": "写真の URL を少なくとも 1 つ入力してください",
+    "error_https": "すべての URL は HTTPS を使用する必要があります",
+    "error_cover": "カバーインデックスは有効な整数でなければなりません",
+    "error_caption": "キャプションが 4,000 文字を超えています"
+  },
+  "publish": {
+    "consent_required": "明示的な同意が必要です",
+    "mode_required": "draft または direct を選択してください",
+    "sending": "確認済みリクエストを TikTok に送信中…",
+    "success": "{status} · {note}",
+    "idempotent": " (同一リクエスト、重複なし)",
+    "error": "リクエストが確認されませんでした: {error} 結果が不明な場合は、同じリクエスト キーで再試行するか、サポートにお問い合わせください。",
+    "status_updates": "{status}",
+    "status_with_reason": "{status} · {reason}",
+    "error_refresh": "リクエストが確認されませんでした: {error} 結果が不明な場合は、同じリクエスト キーで再試行するか、サポートにお問い合わせください。"
+  },
+  "status": {
+    "uploading": "zTTato ワークスペースにアップロード中…",
+    "preparing_photos": "写真セットを準備中…",
+    "sending": "確認済みリクエストを TikTok に送信中…",
+    "preparing_photos_2": "写真セットを準備中…",
+    "photos_ready": "{filename} · {count} 枚の写真が準備完了。",
+    "video_ready": "{filename} · {size} MiB 準備完了。",
+    "no_content": "コンテンツが送信されていません。",
+    "uploading_workspace": "zTTato ワークスペースにアップロード中…"
+  },
+  "errors": {
+    "session_expired": "セッションが期限切れです。ダッシュボードを再読み込みしてください。",
+    "request_failed": "リクエスト失敗 ({status})",
+    "request_rejected": "リクエストが拒否されました",
+    "upload_failed": "アップロード失敗: {error}",
+    "video_required": "先に動画をアップロードしてください",
+    "photo_required": "先に写真をアップロードしてください",
+    "consent_required": "明示的な同意が必要です",
+    "invalid_mode": "draft または direct を選択してください",
+    "max_photos": "最大 35 枚まで",
+    "https_required": "すべての URL は HTTPS を使用する必要があります",
+    "cover_invalid": "カバーインデックスは有効な整数でなければなりません",
+    "caption_too_long": "キャプションが 4,000 文字を超えています",
+    "photo_required": "先に写真をアップロードしてください",
+    "invalid_mode": "draft または direct を選択してください",
+    "max_photos": "最大 35 枚まで",
+    "https_required": "すべての URL は HTTPS を使用する必要があります",
+    "cover_invalid": "カバーインデックスは有効な整数でなければなりません",
+    "caption_too_long": "キャプションが 4,000 文字を超えています",
+    "photo_required": "先に写真をアップロードしてください",
+    "invalid_mode": "draft または direct を選択してください",
+    "max_photos": "最大 35 枚まで",
+    "https_required": "すべての URL は HTTPS を使用する必要があります",
+    "cover_invalid": "カバーインデックスは有効な整数でなければなりません",
+    "caption_too_long": "キャプションが 4,000 文字を超えています",
+    "photo_required": "先に写真をアップロードしてください",
+    "invalid_mode": "draft または direct を選択してください",
+    "max_photos": "最大 35 枚まで",
+    "https_required": "すべての URL は HTTPS を使用する必要があります",
+    "cover_invalid": "カバーインデックスは有効な整数でなければなりません",
+    "caption_too_long": "キャプションが 4,000 文字を超えています",
+    "photo_required": "先に写真をアップロードしてください",
+    "idempotent_replay": " (同一リクエスト、重複なし)",
+    "error_unknown": "リクエスト失敗 ({status})"
+  },
+  "creator_info": {
+    "connected": "接続済み: {name}",
+    "unauthenticated": "未審査アプリ: 直接投稿は「自分のみ」に制限されます。",
+    "max_duration": "最大動画長: {seconds} 秒",
+    "nickname": "TikTok クリエイター",
+    "avatar_alt": "TikTok クリエイター",
+    "message_unavailable": "クリエイター オプションを利用できません: {error}",
+    "direct_post_scope": "直接投稿には video.publish スコープが必要です。この権限で TikTok に再接続してください。",
+    "connected_prefix": "接続済み: "
+  },
+  "privacy": {
+    "PUBLIC_TO_EVERYONE": "全員に公開",
+    "MUTUAL_FOLLOW_FRIENDS": "相互フォロワー",
+    "FOLLOWER_OF_CREATOR": "フォロワー",
+    "SELF_ONLY": "自分のみ"
+  },
+  "account": {
+    "title": "アカウント管理",
+    "delete": "zTTato アカウントデータを削除",
+    "disconnect_note": "切断すると TikTok の認可が取り消されます。削除するとローカル トークンとアップロード済みファイルが削除されます。TikTok で認可を取り消せない場合は、TikTok アカウント設定で zTTato も取り消してください。"
+  },
+  "landing": {
+    "title": "zTTato Creator",
+    "description": "TikTok に接続し、動画コンテンツを準備し、下書きとしてアップロードするか、明示的な同意のもとで直接投稿するかを選択します。",
+    "hero": {
+      "eyebrow": "CREATE · REVIEW · SHARE",
+      "headline": "あなたの動画、あなたの選択、あなたのアカウント",
+      "subheadline": "TikTok Login Kit で TikTok アカウントを接続し、動画と投稿設定を見て、下書きとしてアップロードするか、明示的な同意のもとで直接投稿するかを選択します。"
+    },
+    "features": {
+      "connect": {
+        "title": "01 / CONNECT",
+        "title_text": "TikTok で認証",
+        "description": "認証は TikTok で行われます。zTTato は TikTok のパスワードを要求しません。"
+      },
+      "prepare": {
+        "title": "02 / PREPARE",
+        "title_text": "転送前の確認",
+        "description": "MP4 を選択し、キャプション、公開範囲、クリエイター固有の設定を確認してから送信します。"
+      },
+      "confirm": {
+        "title": "03 / CONFIRM",
+        "title_text": "明示的な同意",
+        "description": "確認するまで何も転送されません。下書きアップロードと直接投稿は別の選択肢です。"
+      }
+    },
+    "actions": {
+      "connect": "TikTok で続行",
+      "dashboard": "クリエイター ダッシュボード",
+      "review": "レビューを見る"
+    },
+    "footer": {
+      "privacy": "プライバシー ポリシー",
+      "terms": "利用規約"
+    }
+  },
+  "common": {
+    "loading": "読み込み中…",
+    "error": "エラー",
+    "success": "成功",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "delete": "削除",
+    "edit": "編集",
+    "close": "閉じる",
+    "back": "戻る",
+    "next": "次へ",
+    "submit": "送信",
+    "yes": "はい",
+    "no": "いいえ",
+    "ok": "OK",
+    "retry": "再試行",
+    "close": "閉じる"
+  }
+}

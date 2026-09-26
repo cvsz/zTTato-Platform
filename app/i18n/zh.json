@@ -1,0 +1,277 @@
+{
+  "app": {
+    "name": "zTTato Creator",
+    "tagline": "你的视频，你的选择，你的账号"
+  },
+  "nav": {
+    "home": "首页",
+    "review": "评审",
+    "privacy": "隐私",
+    "terms": "条款"
+  },
+  "dashboard": {
+    "title": "创作者仪表板",
+    "subtitle": "未经您明确确认，不会上传或发布任何内容。您的 TikTok 密码仅在 TikTok 官方授权页面输入。",
+    "connection": {
+      "title": "1 · TikTok 连接",
+      "loading": "正在加载您的会话…",
+      "connected": "您的 TikTok 账号已连接。",
+      "disconnected": "连接您的 TikTok 账号以开始。",
+      "scopes": "已授予权限: {scopes}",
+      "no_scopes": "使用 TikTok 官方授权页面"
+    },
+    "creator": {
+      "connected": "已连接: {name}",
+      "unauthenticated": "未审核应用: 直接发布仅限\"仅自己可见\"",
+      "max_duration": "最大视频时长: {seconds} 秒"
+    },
+    "video": {
+      "title": "2 · 准备您的视频",
+      "file_label": "MP4 文件 (最多 64 MiB)",
+      "file_help": "此版本仅支持 MP4 文件。请勿上传敏感内容。",
+      "upload_button": "上传到 zTTato 工作区",
+      "caption_label": "标题 (最多 2,200 字符)",
+      "caption_placeholder": "在此输入标题",
+      "publishing_method": "发布方式",
+      "draft": "上传为草稿 · 在 TikTok 中完成发布",
+      "direct": "直接发布 · 确认后直接发送",
+      "privacy_label": "TikTok 可见性 (当前账号可选项)",
+      "privacy_loading": "正在查询 TikTok…",
+      "creator_interactions": "创作者互动设置",
+      "disable_comments": "禁用评论",
+      "disable_duet": "禁用 Duet",
+      "disable_stitch": "禁用 Stitch",
+      "content_disclosure": "内容披露",
+      "own_brand": "此视频推广我的业务",
+      "paid_brand": "此视频为付费合作",
+      "ai_content": "此视频包含 AI 生成内容"
+    },
+    "photo": {
+      "title": "2b · 准备照片 (图片发布)",
+      "note": "通过 HTTPS URL 上传最多 35 张照片。每张照片必须无需登录即可访问。",
+      "urls_label": "照片 URL (每行一个，最多 35 个，仅限 HTTPS)",
+      "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+      "photo_help": "支持 JPEG/WebP。最多 35 张照片。URL 必须公开可访问且使用 HTTPS。",
+      "upload_button": "准备照片集",
+      "caption_label": "标题 (照片最多 4,000 字符)",
+      "caption_placeholder": "在此输入标题",
+      "cover_label": "封面照片索引 (从 0 开始)",
+      "publishing_method": "发布方式",
+      "photo_draft": "上传为草稿 · 在 TikTok 中完成发布",
+      "photo_direct": "直接发布 · 确认后直接发送",
+      "photo_privacy": "TikTok 可见性 (当前账号可选项)",
+      "photo_privacy_loading": "正在查询 TikTok…",
+      "photo_interactions": "创作者互动设置",
+      "photo_disable_comments": "禁用评论",
+      "photo_disable_duet": "禁用 Duet",
+      "photo_disable_stitch": "禁用 Stitch",
+      "photo_disclosure": "内容披露",
+      "photo_own_brand": "此视频推广我的业务",
+      "photo_paid_brand": "此视频为付费合作",
+      "photo_ai_content": "此视频包含 AI 生成内容"
+    },
+    "review": {
+      "title": "3 · 审核并确认",
+      "summary_video": "视频已就绪 ",
+      "summary_photo": "照片集已就绪 ",
+      "summary_none": "请先上传媒体 ",
+      "summary_draft": "视频将进入您的 TikTok 收件箱，您可在其中完成编辑和发布。",
+      "summary_direct": "直接发布将使用当前的 TikTok 隐私设置和已勾选的披露选项。",
+      "summary_none_media": "请先上传媒体 ",
+      "confirmation": "在您确认前不会传输任何内容。",
+      "consent": "我已查看所选内容、隐私设置和披露信息。我明确同意将此内容发送到 TikTok。",
+      "publish_button": "发送到 TikTok",
+      "note": "草稿: 从 TikTok 收件箱完成发布。直接发布: TikTok 处理帖子并应用账号/API 限制。",
+      "status": "未发送内容。",
+      "refresh": "刷新 TikTok 状态"
+    },
+    "account": {
+      "title": "账户控制",
+      "delete": "删除 zTTato 账户数据",
+      "disconnect_note": "断开连接将撤销 TikTok 授权。删除将移除本地令牌和上传的文件。如果 TikTok 无法撤销授权，请在 TikTok 账户设置中也撤销 zTTato。"
+    }
+  },
+  "creator": {
+    "connected": "已连接: {name}",
+    "unauthenticated": "未审核应用: 直接发布仅限\"仅自己可见\"",
+    "max_duration": "最大视频时长: {seconds} 秒",
+    "nickname": "TikTok 创作者",
+    "avatar_alt": "TikTok 创作者",
+    "message_unavailable": "创作者选项不可用: {error}",
+    "direct_post_scope": "直接发布需要 video.publish 权限。请重新连接 TikTok 并授予此权限。",
+    "connected_prefix": "已连接: "
+  },
+  "video": {
+    "file_label": "MP4 文件 (最多 64 MiB)",
+    "file_help": "此版本仅支持 MP4 文件。请勿上传敏感内容。",
+    "upload_button": "上传到 zTTato 工作区",
+    "size_ready": "{filename} · {size} MiB 已就绪",
+    "uploading": "正在上传到您的 zTTato 工作区…",
+    "error_size": "视频必须是不超过 64 MiB 的 MP4 文件",
+    "error_format": "视频必须是 MP4 文件",
+    "uploading_text": "正在上传到您的 zTTato 工作区…",
+    "ready_text": "{filename} · {size} MiB 已就绪"
+  },
+  "photo": {
+    "urls_label": "照片 URL (每行一个，最多 35 个，仅限 HTTPS)",
+    "urls_placeholder": "https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg",
+    "help": "支持 JPEG/WebP。最多 35 张照片。URL 必须公开可访问且使用 HTTPS。",
+    "upload_button": "准备照片集",
+    "caption_label": "标题 (照片最多 4,000 字符)",
+    "caption_placeholder": "在此输入标题",
+    "cover_label": "封面照片索引 (从 0 开始)",
+    "upload_button": "准备照片集",
+    "max_photos": "最多 35 张照片",
+    "https_required": "所有 URL 必须使用 HTTPS",
+    "cover_index": "封面索引必须是有效整数",
+    "caption_length": "标题超过 4,000 字符",
+    "preparing": "正在准备照片集…",
+    "ready": "{filename} · {count} 张照片就绪。",
+    "error_urls": "请至少输入一个照片 URL",
+    "error_max": "最多 35 张照片",
+    "error_https": "所有 URL 必须使用 HTTPS",
+    "error_cover": "封面索引必须是有效整数",
+    "error_caption": "标题超过 4,000 字符",
+    "error_urls": "请至少输入一个照片 URL",
+    "error_https": "所有 URL 必须使用 HTTPS",
+    "error_cover": "封面索引必须是有效整数",
+    "error_caption": "标题超过 4,000 字符"
+  },
+  "publish": {
+    "consent_required": "需要明确确认",
+    "mode_required": "选择 draft 或 direct",
+    "sending": "正在发送确认请求到 TikTok…",
+    "success": "{status} · {note}",
+    "idempotent": " (同一请求，未重复)",
+    "error": "请求未确认: {error} 如果结果不确定，请使用相同的请求密钥重试或联系支持。",
+    "status_updates": "{status}",
+    "status_with_reason": "{status} · {reason}",
+    "error_refresh": "请求未确认: {error} 如果结果不确定，请使用相同的请求密钥重试或联系支持。"
+  },
+  "status": {
+    "uploading": "正在上传到您的 zTTato 工作区…",
+    "preparing_photos": "正在准备照片集…",
+    "sending": "正在发送确认请求到 TikTok…",
+    "preparing_photos_2": "正在准备照片集…",
+    "photos_ready": "{filename} · {count} 张照片就绪。",
+    "video_ready": "{filename} · {size} MiB 已就绪。",
+    "no_content": "未发送内容。",
+    "uploading_workspace": "正在上传到您的 zTTato 工作区…"
+  },
+  "errors": {
+    "session_expired": "会话已过期。请重新加载仪表板。",
+    "request_failed": "请求失败 ({status})",
+    "request_rejected": "请求被拒绝",
+    "upload_failed": "上传失败: {error}",
+    "video_required": "请先上传视频",
+    "photo_required": "请先上传照片",
+    "consent_required": "需要明确确认",
+    "invalid_mode": "选择 draft 或 direct",
+    "max_photos": "最多 35 张照片",
+    "https_required": "所有 URL 必须使用 HTTPS",
+    "cover_invalid": "封面索引必须是有效整数",
+    "caption_too_long": "标题超过 4,000 字符",
+    "photo_required": "请先上传照片",
+    "invalid_mode": "选择 draft 或 direct",
+    "max_photos": "最多 35 张照片",
+    "https_required": "所有 URL 必须使用 HTTPS",
+    "cover_invalid": "封面索引必须是有效整数",
+    "caption_too_long": "标题超过 4,000 字符",
+    "photo_required": "请先上传照片",
+    "invalid_mode": "选择 draft 或 direct",
+    "max_photos": "最多 35 张照片",
+    "https_required": "所有 URL 必须使用 HTTPS",
+    "cover_invalid": "封面索引必须是有效整数",
+    "caption_too_long": "标题超过 4,000 字符",
+    "photo_required": "请先上传照片",
+    "invalid_mode": "选择 draft 或 direct",
+    "max_photos": "最多 35 张照片",
+    "https_required": "所有 URL 必须使用 HTTPS",
+    "cover_invalid": "封面索引必须是有效整数",
+    "caption_too_long": "标题超过 4,000 字符",
+    "photo_required": "请先上传照片",
+    "invalid_mode": "选择 draft 或 direct",
+    "max_photos": "最多 35 张照片",
+    "https_required": "所有 URL 必须使用 HTTPS",
+    "cover_invalid": "封面索引必须是有效整数",
+    "caption_too_long": "标题超过 4,000 字符",
+    "photo_required": "请先上传照片",
+    "idempotent_replay": " (同一请求，未重复)",
+    "error_unknown": "请求失败 ({status})"
+  },
+  "creator_info": {
+    "connected": "已连接: {name}",
+    "unauthenticated": "未审核应用: 直接发布仅限\"仅自己可见\"",
+    "max_duration": "最大视频时长: {seconds} 秒",
+    "nickname": "TikTok 创作者",
+    "avatar_alt": "TikTok 创作者",
+    "message_unavailable": "创作者选项不可用: {error}",
+    "direct_post_scope": "直接发布需要 video.publish 权限。请重新连接 TikTok 并授予此权限。",
+    "connected_prefix": "已连接: "
+  },
+  "privacy": {
+    "PUBLIC_TO_EVERYONE": "公开",
+    "MUTUAL_FOLLOW_FRIENDS": "共同关注的好友",
+    "FOLLOWER_OF_CREATOR": "粉丝",
+    "SELF_ONLY": "仅自己可见"
+  },
+  "account": {
+    "title": "账户控制",
+    "delete": "删除 zTTato 账户数据",
+    "disconnect_note": "断开连接将撤销 TikTok 授权。删除将移除本地令牌和上传的文件。如果 TikTok 无法撤销授权，请在 TikTok 账户设置中也撤销 zTTato。"
+  },
+  "landing": {
+    "title": "zTTato Creator",
+    "description": "连接 TikTok，准备视频内容，并选择是上传草稿还是直接发布并显式确认。",
+    "hero": {
+      "eyebrow": "CREATE · REVIEW · SHARE",
+      "headline": "你的视频，你的选择，你的账号",
+      "subheadline": "通过 TikTok Login Kit 连接你的 TikTok 账号，查看视频和发布设置，然后明确选择上传草稿或直接发布。"
+    },
+    "features": {
+      "connect": {
+        "title": "01 / CONNECT",
+        "title_text": "Authorize with TikTok",
+        "description": "Authorization happens on TikTok. zTTato never asks for your TikTok password."
+      },
+      "prepare": {
+        "title": "02 / PREPARE",
+        "title_text": "Review before transfer",
+        "description": "Select an MP4 and review caption, visibility and creator-specific controls before sending anything."
+      },
+      "confirm": {
+        "title": "03 / CONFIRM",
+        "title_text": "Explicit consent",
+        "description": "Nothing is transferred until you confirm. Draft upload and Direct Post are separate choices."
+      }
+    },
+    "actions": {
+      "connect": "Continue with TikTok",
+      "dashboard": "Creator dashboard",
+      "review": "Review walkthrough"
+    },
+    "footer": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "common": {
+    "loading": "加载中…",
+    "error": "错误",
+    "success": "成功",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "submit": "提交",
+    "yes": "是",
+    "no": "否",
+    "ok": "确定",
+    "retry": "重试",
+    "close": "关闭"
+  }
+}
