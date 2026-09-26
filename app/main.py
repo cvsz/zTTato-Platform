@@ -6,7 +6,7 @@ import secrets
 import time
 import uuid
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 from fastapi import Depends, FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
@@ -33,6 +33,35 @@ from app.tiktok import TikTokClient
 WEB = Path(__file__).resolve().parent.parent / "web"
 COOKIE = "zttato_session"
 CSRF = "zttato_csrf"
+
+
+AVATAR_CDN_SUFFIXES = (
+    "tiktokcdn.com",
+    "tiktokcdn-us.com",
+    "tiktokcdn-eu.com",
+    "tiktokcdn-in.com",
+)
+
+
+def safe_avatar_url(value: object) -> str | None:
+    """Limit externally rendered profile images to HTTPS TikTok CDN URLs."""
+    if not isinstance(value, str) or len(value) > 2048:
+        return None
+    try:
+        parsed = urlparse(value)
+        host = (parsed.hostname or "").lower().rstrip(".")
+        if (
+            parsed.scheme != "https"
+            or parsed.username
+            or parsed.password
+            or parsed.fragment
+            or parsed.port not in (None, 443)
+            or not any(host == suffix or host.endswith("." + suffix) for suffix in AVATAR_CDN_SUFFIXES)
+        ):
+            return None
+    except ValueError:
+        return None
+    return value
 
 
 class PublishInput(BaseModel):
@@ -141,7 +170,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; "
-            "img-src 'self' data:; connect-src 'self'; form-action 'self'"
+            "img-src 'self' data: https://tiktokcdn.com https://*.tiktokcdn.com "
+            "https://tiktokcdn-us.com https://*.tiktokcdn-us.com "
+            "https://tiktokcdn-eu.com https://*.tiktokcdn-eu.com "
+            "https://tiktokcdn-in.com https://*.tiktokcdn-in.com; "
+            "connect-src 'self'; form-action 'self'"
         )
         response.headers["Cache-Control"] = (
             "no-store" if request.url.path.startswith(("/api/", "/tiktok/")) else "public, max-age=300"
@@ -289,6 +322,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         found.refresh_expires_at = now + int(tokens["refresh_expires_in"])
         session.commit()
         return RedirectResponse("/dashboard?connected=1", status_code=303)
+
+    @app.get("/api/profile")
+    async def basic_profile(
+        row: BrowserSession = Depends(current),
+        session: Session = Depends(db),
+        client: TikTokClient = Depends(tiktok),
+    ):
+        linked = account(row, session, "user.info.basic")
+        user = await client.user_info(await access(linked, session, client))
+        if user.get("open_id") != linked.open_id:
+            raise HTTPException(502, "TikTok basic profile does not match the linked account")
+        display_name = user.get("display_name")
+        return {
+            "display_name": display_name[:100] if isinstance(display_name, str) else "",
+            "avatar_url": safe_avatar_url(user.get("avatar_url")),
+        }
 
     @app.get("/api/creator-info")
     async def creator_info(
