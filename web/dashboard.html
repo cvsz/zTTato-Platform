@@ -7,7 +7,8 @@
   <meta name="description" content="Authorize TikTok, prepare an MP4, and explicitly choose draft upload or direct post.">
   <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/styles.css">
-  <script src="/assets/dashboard.js" defer></script>
+  <script src="/assets/i18n.js" defer></script>
+<script src="/assets/dashboard.js" defer></script>
 </head>
 <body>
   <main class="shell dashboard">
@@ -18,18 +19,25 @@
         zTTato Creator
       </a>
       <nav>
-        <a href="/">Home</a>
-        <a href="/review-preview">Review</a>
-        <a href="/privacy-policy">Privacy</a>
-        <a href="/terms-of-service">Terms</a>
+        <a href="/" data-i18n="nav.home">Home</a>
+        <a href="/review-preview" data-i18n="nav.review">Review</a>
+        <a href="/privacy-policy" data-i18n="nav.privacy">Privacy</a>
+        <a href="/terms-of-service" data-i18n="nav.terms">Terms</a>
       </nav>
+      <div class="lang-selector">
+        <select id="lang-select" aria-label="Select language">
+          <option value="en">English</option>
+          <option value="th">ไทย</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="vi">Tiếng Việt</option>
+        </select>
+      </div>
     </header>
 
-    <h1>Creator dashboard</h1>
-    <p class="note lead">
-      Nothing uploads or publishes without your explicit confirmation.
-      Your TikTok password is entered only on TikTok's own authorization page.
-    </p>
+    <h1 data-i18n="dashboard.title">Creator dashboard</h1>
+    <p class="note lead" data-i18n="dashboard.subtitle">Nothing uploads or publishes without your explicit confirmation. Your TikTok password is entered only on TikTok's own authorization page.</p>
 
     <!-- 1. Connection Card -->
     <section class="panel connection-card" id="connection-panel">
@@ -51,12 +59,8 @@
       </div>
 
       <div class="connection-actions">
-        <a id="connect" class="button primary hidden" href="/auth/tiktok/start">
-          Continue with TikTok
-        </a>
-        <button id="disconnect" type="button" class="btn-secondary hidden">
-          Disconnect TikTok
-        </button>
+        <a id="connect" class="button primary hidden" href="/auth/tiktok/start" data-i18n="landing.actions.connect">Continue with TikTok</a>
+        <button id="disconnect" type="button" class="btn-secondary hidden" data-i18n="account.delete">Disconnect TikTok</button>
       </div>
     </section>
 
@@ -65,7 +69,7 @@
       <div class="two-col">
         <!-- 2. Prepare Video -->
         <section class="panel prepare-panel">
-          <h2><span class="step">2</span> Prepare your video</h2>
+          <h2 data-i18n="dashboard.video.title">2 · Prepare your video</h2>
 
           <!-- Drop zone -->
           <div id="drop-zone" class="drop-zone" tabindex="0" role="button"
@@ -77,52 +81,51 @@
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
               </svg>
-              <p class="drop-title">Drop an MP4 here or click to browse</p>
-              <p class="note">Only MP4 &middot; maximum 64 MiB &middot; never upload sensitive content</p>
+              <p class="drop-title" data-i18n="dashboard.video.drop_title">Drop an MP4 here or click to browse</p>
+              <p class="note" data-i18n="dashboard.video.drop_help">Only MP4 &middot; maximum 64 MiB &middot; never upload sensitive content</p>
             </div>
             <input id="file" type="file" accept=".mp4,video/mp4" class="file-input"
                    aria-describedby="file-help">
           </div>
-          <p id="file-help" class="sr-only">Select an MP4 video file up to 64 MiB.</p>
+          <p id="file-help" class="sr-only" data-i18n="dashboard.video.file_help">Select an MP4 video file up to 64 MiB.</p>
 
           <div id="file-preview" class="file-preview hidden">
             <div class="file-info">
               <span id="file-name" class="file-name"></span>
               <span id="file-size" class="file-size"></span>
             </div>
-            <button id="clear-file" type="button" class="btn-text">Remove</button>
+            <button id="clear-file" type="button" class="btn-text" data-i18n="common.remove">Remove</button>
           </div>
 
-          <button id="upload" type="button" class="btn-secondary" disabled>
-            Upload to zTTato workspace
-          </button>
+          <button id="upload" type="button" class="btn-secondary" disabled data-i18n="dashboard.video.upload_button">Upload to zTTato workspace</button>
           <p id="media-result" role="status" class="note media-result"></p>
 
           <!-- Caption -->
-          <label for="caption">Caption</label>
+          <label for="caption" data-i18n="dashboard.video.caption_label">Caption</label>
           <div class="caption-wrap">
             <textarea id="caption" maxlength="2200"
                       placeholder="Write your caption here…"
+                      data-i18n-placeholder="dashboard.video.caption_placeholder"
                       rows="4"></textarea>
             <span id="caption-count" class="char-count">0 / 2200</span>
           </div>
 
           <!-- Publishing method -->
           <fieldset class="mode-fieldset">
-            <legend>Publishing method</legend>
+            <legend data-i18n="dashboard.video.publishing_method">Publishing method</legend>
             <div class="segmented">
               <label class="segment">
                 <input type="radio" name="mode" id="mode-draft" value="draft" checked>
                 <span class="segment-label">
-                  <strong>Upload as Draft</strong>
-                  <small>Finish the post inside TikTok</small>
+                  <strong data-i18n="dashboard.video.draft">Upload as Draft</strong>
+                  <small data-i18n="dashboard.video.draft_help">Finish the post inside TikTok</small>
                 </span>
               </label>
               <label class="segment">
                 <input type="radio" name="mode" id="mode-direct" value="direct">
                 <span class="segment-label">
-                  <strong>Direct Post</strong>
-                  <small>Send after confirmation</small>
+                  <strong data-i18n="dashboard.video.direct">Direct Post</strong>
+                  <small data-i18n="dashboard.video.direct_help">Send after confirmation</small>
                 </span>
               </label>
             </div>
@@ -130,35 +133,87 @@
 
           <!-- Direct options (revealed when Direct is selected) -->
           <div id="direct-options" class="direct-options hidden">
-            <label for="privacy">TikTok visibility</label>
+            <label for="privacy" data-i18n="dashboard.video.privacy_label">TikTok visibility</label>
             <select id="privacy" disabled>
-              <option value="">Querying TikTok…</option>
+              <option value="" data-i18n="dashboard.video.privacy_loading">Querying TikTok…</option>
             </select>
             <p id="creator-message" class="note"></p>
 
             <fieldset>
-              <legend>Creator interaction settings</legend>
+              <legend data-i18n="dashboard.video.creator_interactions">Creator interaction settings</legend>
               <label class="choice">
-                <input type="checkbox" id="disable-comment"> Disable comments
+                <input type="checkbox" id="disable-comment"> <span data-i18n="dashboard.video.disable_comments">Disable comments</span>
               </label>
               <label class="choice">
-                <input type="checkbox" id="disable-duet"> Disable Duet
+                <input type="checkbox" id="disable-duet"> <span data-i18n="dashboard.video.disable_duet">Disable Duet</span>
               </label>
               <label class="choice">
-                <input type="checkbox" id="disable-stitch"> Disable Stitch
+                <input type="checkbox" id="disable-stitch"> <span data-i18n="dashboard.video.disable_stitch">Disable Stitch</span>
               </label>
             </fieldset>
 
             <fieldset>
-              <legend>Content disclosure</legend>
+              <legend data-i18n="dashboard.video.content_disclosure">Content disclosure</legend>
               <label class="choice">
-                <input type="checkbox" id="own-brand"> This video promotes my own business
+                <input type="checkbox" id="own-brand"> <span data-i18n="dashboard.video.own_brand">This video promotes my own business</span>
               </label>
               <label class="choice">
-                <input type="checkbox" id="paid-brand"> This video is a paid partnership
+                <input type="checkbox" id="paid-brand"> <span data-i18n="dashboard.video.paid_brand">This video is a paid partnership</span>
+              </label>
+</section>
+
+        <!-- 2b. Prepare photos (Photo Post) -->
+        <section class="panel">
+          <h2 data-i18n="dashboard.photo.title">2b · Prepare photos (Photo Post)</h2>
+          <p class="note" data-i18n="dashboard.photo.note">Upload up to 35 photos via HTTPS URLs. Each photo must be accessible without authentication.</p>
+          <label for="photo-urls" data-i18n="dashboard.photo.urls_label">Photo URLs (one per line, max 35, HTTPS only)</label>
+          <textarea id="photo-urls" rows="5" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg" aria-describedby="photo-help" data-i18n-placeholder="dashboard.photo.urls_placeholder"></textarea>
+          <p id="photo-help" class="note" data-i18n="dashboard.photo.photo_help">JPEG/WebP supported. Max 35 photos. URLs must be publicly accessible and use HTTPS.</p>
+          <button id="photo-upload" type="button" disabled data-i18n="dashboard.photo.upload_button">Prepare photo set</button>
+          <p id="photo-result" role="status" class="note"></p>
+          <label for="photo-caption" data-i18n="dashboard.photo.caption_label">Caption (maximum 4,000 characters for photos)</label>
+          <textarea id="photo-caption" maxlength="4000" placeholder="Write your caption here" data-i18n-placeholder="dashboard.photo.caption_placeholder"></textarea>
+          <label for="photo-cover" data-i18n="dashboard.photo.cover_label">Cover photo index (0-based)</label>
+          <input id="photo-cover" type="number" min="0" max="34" value="0" style="width: 80px;">
+          <fieldset>
+            <legend data-i18n="dashboard.photo.publishing_method">Publishing method</legend>
+            <label class="choice">
+              <input type="radio" name="photo-mode" id="photo-mode-draft" value="draft" checked>
+              <span data-i18n="dashboard.photo.photo_draft">Upload as Draft · you finish the post in TikTok</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="photo-mode" id="photo-mode-direct" value="direct">
+              <span data-i18n="dashboard.photo.photo_direct">Direct Post · send directly after confirmation</span>
+            </label>
+          </fieldset>
+          <div id="photo-direct-options" class="direct-options hidden">
+            <label for="photo-privacy" data-i18n="dashboard.photo.photo_privacy">TikTok visibility (current account choices)</label>
+            <select id="photo-privacy" disabled>
+              <option value="" data-i18n="dashboard.photo.photo_privacy_loading">Querying TikTok…</option>
+            </select>
+            <p id="photo-creator-message" class="note"></p>
+            <fieldset>
+              <legend data-i18n="dashboard.photo.photo_interactions">Creator interaction settings</legend>
+              <label class="choice">
+                <input type="checkbox" id="photo-disable-comment"> <span data-i18n="dashboard.photo.photo_disable_comments">Disable comments</span>
               </label>
               <label class="choice">
-                <input type="checkbox" id="ai-content"> This video contains AI-generated content
+                <input type="checkbox" id="photo-disable-duet"> <span data-i18n="dashboard.photo.photo_disable_duet">Disable Duet</span>
+              </label>
+              <label class="choice">
+                <input type="checkbox" id="photo-disable-stitch"> <span data-i18n="dashboard.photo.photo_disable_stitch">Disable Stitch</span>
+              </label>
+            </fieldset>
+            <fieldset>
+              <legend data-i18n="dashboard.photo.photo_disclosure">Content disclosure</legend>
+              <label class="choice">
+                <input type="checkbox" id="photo-own-brand"> <span data-i18n="dashboard.photo.photo_own_brand">This video promotes my own business</span>
+              </label>
+              <label class="choice">
+                <input type="checkbox" id="photo-paid-brand"> <span data-i18n="dashboard.photo.photo_paid_brand">This video is a paid partnership</span>
+              </label>
+<label class="choice">
+                <input type="checkbox" id="ai-content"> <span data-i18n="dashboard.photo.photo_ai_content">This video contains AI-generated content</span>
               </label>
             </fieldset>
           </div>
@@ -166,58 +221,44 @@
 
         <!-- 3. Review & Confirm -->
         <section class="panel review-panel">
-          <h2><span class="step">3</span> Review and confirm</h2>
+          <h2 data-i18n="dashboard.review.title"><span class="step">3</span> Review and confirm</h2>
 
           <div id="summary" class="summary-card">
-            <p class="note">Choose a video and a publishing method first.</p>
+            <p class="note" data-i18n="dashboard.review.summary_none">Choose a video or photos and a publishing method first.</p>
           </div>
 
           <label class="choice consent-choice">
             <input type="checkbox" id="consent">
-            <span>
-              I reviewed the selected content, privacy setting and disclosures.
-              I expressly consent to sending this video to TikTok.
-            </span>
+            <span data-i18n="dashboard.review.consent">I reviewed the selected content, privacy setting and disclosures. I expressly consent to sending this to TikTok.</span>
           </label>
 
-          <button class="primary full-width" id="publish" type="button" disabled>
-            Send to TikTok
-          </button>
+          <button class="primary full-width" id="publish" type="button" disabled data-i18n="dashboard.review.publish_button">Send to TikTok</button>
 
           <p class="note tip">
-            <strong>Draft</strong> → finish posting from TikTok inbox.<br>
-            <strong>Direct</strong> → TikTok processes the post and applies account/API restrictions.
+            <strong data-i18n="dashboard.review.draft">Draft</strong> → finish posting from TikTok inbox.<br>
+            <strong data-i18n="dashboard.review.direct">Direct</strong> → TikTok processes the post and applies account/API restrictions.
           </p>
 
-          <div id="status" class="status" role="status" aria-live="polite">
-            No content sent.
-          </div>
+          <div id="status" class="status" role="status" aria-live="polite" data-i18n="dashboard.review.status">No content sent.</div>
 
-          <button id="refresh-status" type="button" class="btn-secondary" disabled>
-            Refresh TikTok status
-          </button>
+          <button id="refresh-status" type="button" class="btn-secondary" disabled data-i18n="dashboard.review.refresh">Refresh TikTok status</button>
         </section>
       </div>
 
       <!-- Account controls -->
       <section class="panel account-panel">
-        <h2>Account controls</h2>
-        <p class="note">
-          Disconnect revokes TikTok authorization. Delete removes local tokens and uploaded files.
-          If TikTok revocation is unavailable, also revoke zTTato in your TikTok account settings.
-        </p>
+        <h2 data-i18n="account.title">Account controls</h2>
+        <p class="note" data-i18n="account.disconnect_note">Disconnect revokes TikTok authorization. Delete removes local tokens and uploaded files. If TikTok revocation is unavailable, also revoke zTTato in your TikTok account settings.</p>
         <div class="account-actions">
-          <button id="delete-data" type="button" class="btn-danger">
-            Delete zTTato account data
-          </button>
+          <button id="delete-data" type="button" class="btn-danger" data-i18n="account.delete">Delete zTTato account data</button>
         </div>
       </section>
     </div>
 
     <footer>
       zTTato Creator &middot;
-      <a href="/privacy-policy">Privacy Policy</a> &middot;
-      <a href="/terms-of-service">Terms of Service</a>
+      <a href="/privacy-policy" data-i18n="landing.footer.privacy">Privacy Policy</a> &middot;
+      <a href="/terms-of-service" data-i18n="landing.footer.terms">Terms of Service</a>
     </footer>
   </main>
 </body>

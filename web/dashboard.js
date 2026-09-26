@@ -262,6 +262,31 @@
 
   async function boot() {
     try {
+      // Initialize i18n
+      await i18n.init();
+      // Apply translations to static elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key) el.textContent = i18n.t(key);
+      });
+      // Apply placeholder translations
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key) el.placeholder = i18n.t(key);
+      });
+
+      // Language selector
+      const langSelect = $('lang-select');
+      if (langSelect) {
+        langSelect.value = i18n.getLocale();
+        langSelect.addEventListener('change', async (e) => {
+          await i18n.setLocale(e.target.value);
+          // Reload page to apply translations
+          location.reload();
+        });
+      }
+
+      try {
       const data = await api("/api/session");
       Object.assign(account, data);
 
