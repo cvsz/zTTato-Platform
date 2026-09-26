@@ -151,3 +151,19 @@ def test_unexpected_chunk_acknowledgement_stops_transfer(tmp_path: Path):
                 media.stat().st_size,
             )
         )
+
+
+def test_user_info_queries_only_basic_fields_and_rejects_malformed_data():
+    captured = []
+
+    async def handler(request):
+        captured.append((request.method, str(request.url)))
+        return httpx.Response(200, json={"error": {"code": "ok"}, "data": None})
+
+    client = TikTokClient(None, transport=httpx.MockTransport(handler))
+    with pytest.raises(HTTPException) as error:
+        asyncio.run(client.user_info("fixture-token"))
+    assert error.value.status_code == 502
+    assert captured == [
+        ("GET", "https://open.tiktokapis.com/v2/user/info/?fields=open_id,avatar_url,display_name"),
+    ]
