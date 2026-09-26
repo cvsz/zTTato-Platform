@@ -1,0 +1,6 @@
+{
+  "name": "ZeaZDev CodeQL",
+  "description": "Code scanning baseline for JavaScript/TypeScript and Python. Adjust the language matrix to match the repository.",
+  "iconName": "octicon shield-lock",
+  "categories": ["Code scanning"]
+}

@@ -1,0 +1,28 @@
+name: Secure CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: secure-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate repository baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f README.md
+          echo "Repository baseline present. Add project-specific lint, test, build, and integration steps here."

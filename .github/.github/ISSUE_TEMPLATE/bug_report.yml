@@ -1,0 +1,80 @@
+name: Bug report
+description: Report a reproducible defect in a ZeaZDev project.
+title: "[Bug]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. Do not include secrets, production credentials, private data, or exploitable vulnerability details. Use SECURITY.md for security issues.
+  - type: input
+    id: repository-version
+    attributes:
+      label: Repository and version
+      description: Repository name plus release, tag, branch, or commit SHA.
+      placeholder: ZeaZDev/project @ v1.2.3 or commit abc123
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, architecture, runtime/tool versions, deployment method, browser if relevant, and other important environment details.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+      description: Describe the defect clearly and concisely.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest reliable sequence that reproduces the problem.
+      placeholder: |
+        1. Configure ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, traces, or screenshots
+      description: Redact secrets, tokens, private data, and credentials before posting.
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: regression
+    attributes:
+      label: Regression information
+      description: If this worked before, state the last known working version/commit and the first known failing version/commit if known.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and pull requests for duplicates.
+          required: true
+        - label: I removed secrets, credentials, and private data from this report.
+          required: true
+        - label: This is not a vulnerability that should be reported privately under SECURITY.md.
+          required: true

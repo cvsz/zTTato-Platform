@@ -1,0 +1,6 @@
+{
+  "name": "ZeaZDev Secure CI Baseline",
+  "description": "Minimal least-privilege CI baseline. Extend with project-specific lint, tests, build, integration, and security checks.",
+  "iconName": "octicon shield-check",
+  "categories": ["Continuous integration"]
+}

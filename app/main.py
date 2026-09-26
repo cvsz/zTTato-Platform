@@ -310,7 +310,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raw, csrf, row = new_browser_session(session)
             new_cookie_values = (raw, csrf)
         state = secrets.token_urlsafe(32)
-        session.add(OAuthRequest(state_hash=digest(state), session_id=row.id, expires_at=int(time.time()) + 600))
+        session.add(OAuthRequest(state_hash=digest(state), session_id=row.id, expires_at=int(time.time()) + 900))
         session.commit()
         query = urlencode(
             {

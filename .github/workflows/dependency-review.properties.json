@@ -1,0 +1,6 @@
+{
+  "name": "ZeaZDev Dependency Review",
+  "description": "Reviews dependency changes in pull requests and fails on high-severity findings.",
+  "iconName": "octicon package-dependencies",
+  "categories": ["Security"]
+}

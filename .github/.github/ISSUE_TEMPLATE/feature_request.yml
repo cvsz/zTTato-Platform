@@ -1,0 +1,77 @@
+name: Feature request
+description: Propose a bounded improvement for a ZeaZDev project.
+title: "[Feature]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem first, then the proposed change. Keep requests bounded enough to evaluate, implement, and verify.
+  - type: input
+    id: repository
+    attributes:
+      label: Target repository
+      placeholder: ZeaZDev/project
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user, operator, maintainer, security, reliability, or developer-experience problem should be solved?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the smallest useful change that addresses the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable outcomes that would prove the feature is complete.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security, privacy, or trust-boundary impact
+      description: Note authentication, authorization, tenant, filesystem, network, secret, data-mutation, or privileged-operation implications. Write "None identified" if none.
+    validations:
+      required: true
+  - type: textarea
+    id: operations
+    attributes:
+      label: Operational impact
+      description: Note migrations, deployment, rollback, observability, performance, compatibility, or infrastructure implications.
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Briefly describe reasonable alternatives or why existing functionality is insufficient.
+    validations:
+      required: false
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Explicitly out of scope
+      description: State adjacent work that should not be bundled into this request.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and pull requests for duplicates.
+          required: true
+        - label: I have described a concrete problem, not only a preferred implementation.
+          required: true

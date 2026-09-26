@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ZeaZDev/.github/blob/main/SECURITY.md
+    about: Please use the private reporting guidance in the security policy instead of a public issue.
+  - name: Organization profile and policies
+    url: https://github.com/ZeaZDev/.github
+    about: Review ZeaZDev organization-wide contribution, security, and support guidance.
