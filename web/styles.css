@@ -12,3 +12,7 @@
 .dashboard .note{font-size:.92rem;line-height:1.5;color:#b8c9e8}
 .dashboard .hidden{display:none!important}.dashboard .error{border-left-color:#ff7990}
 @media(max-width:760px){.dashboard .two-col{grid-template-columns:1fr}}
+.dashboard .profile{display:flex;align-items:center;gap:16px;margin:18px 0;padding:12px 0}
+.dashboard .profile-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #58f5da;flex-shrink:0}
+.dashboard .profile strong{color:#f7f9ff;font-size:1.12rem;overflow-wrap:anywhere}
+.dashboard .profile .note{margin:4px 0}
