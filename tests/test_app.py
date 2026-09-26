@@ -251,11 +251,11 @@ def test_dashboard_markup_and_scripts_have_matching_ids_and_decoded_separators()
     web = Path(__file__).resolve().parent.parent / "web"
     html = (web / "dashboard.html").read_text("utf-8")
     javascript = (web / "dashboard.js").read_text("utf-8")
-    identifiers = set(re.findall(r'\\bid="([^"]+)"', html))
-    references = set(re.findall(r'\\$\\("([a-z][a-z0-9-]+)"\\)', javascript))
+    identifiers = set(re.findall(r'\bid="([^"]+)"', html))
+    references = set(re.findall(r'\$\("([a-z][a-z0-9-]+)"\)', javascript))
     assert references <= identifiers, f"Missing dashboard elements: {references - identifiers}"
     for required in ("profile", "profile-avatar", "profile-name", "profile-message"):
         assert required in identifiers
     assert "&middot;" in html
-    assert r"\\u00b7" not in html
-    assert r"\\u00b7" not in javascript
+    assert r"\u00b7" not in html
+    assert r"\u00b7" not in javascript
