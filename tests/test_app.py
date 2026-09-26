@@ -1,10 +1,17 @@
+import re
+import time
 from dataclasses import replace
 from pathlib import Path
+
+import httpx
+from cryptography.fernet import Fernet
 
 from fastapi.testclient import TestClient
 
 from app.config import Settings
-from app.main import create_app
+from app.db import LinkedAccount, make_session_factory
+from app.main import create_app, safe_avatar_url
+from app.security import digest
 
 
 def settings(tmp_path: Path) -> Settings:
@@ -128,3 +135,127 @@ def test_production_rejects_url_values_in_allowed_hosts(tmp_path):
         assert "hostnames only" in str(exc)
     else:
         raise AssertionError("URL-shaped allowed host must fail closed")
+
+
+def test_profile_requires_authenticated_session_and_authorized_scope(tmp_path):
+    client = TestClient(create_app(settings(tmp_path)))
+    assert client.get("/api/profile").status_code == 401
+    client.get("/api/session")
+    assert client.get("/api/profile").status_code == 401
+
+
+def connected_profile_client(tmp_path, scopes="user.info.basic,video.upload"):
+    key = Fernet.generate_key().decode()
+    conf = replace(settings(tmp_path), encryption_key=key)
+    app = create_app(conf)
+    client = TestClient(app)
+    assert client.get("/api/session").status_code == 200
+
+    engine, factory = make_session_factory(conf.database_url, bootstrap=False)
+    token_cipher = Fernet(key.encode())
+    with factory() as session:
+        session.add(
+            LinkedAccount(
+                session_id=digest(client.cookies["zttato_session"]),
+                open_id="fixture-open-id",
+                scopes=scopes,
+                access_cipher=token_cipher.encrypt(b"fixture-access-token").decode(),
+                refresh_cipher=token_cipher.encrypt(b"fixture-refresh-token").decode(),
+                access_expires_at=int(time.time()) + 3600,
+                refresh_expires_at=int(time.time()) + 86400,
+            )
+        )
+        session.commit()
+    engine.dispose()
+    return app, client
+
+
+def test_profile_reads_tiktok_user_info_without_exposing_identifiers_or_tokens(tmp_path):
+    app, client = connected_profile_client(tmp_path)
+    avatar = "https://p16-sign.tiktokcdn-us.com/avatar.jpeg?expires=123&signature=fixture"
+    observed = []
+
+    async def provider(request):
+        observed.append((request.method, request.url.path, request.url.params.get("fields")))
+        assert request.headers["authorization"] == "Bearer fixture-access-token"
+        return httpx.Response(
+            200,
+            json={
+                "error": {"code": "ok"},
+                "data": {
+                    "user": {
+                        "open_id": "fixture-open-id",
+                        "display_name": "Fixture Creator",
+                        "avatar_url": avatar,
+                        "access_token": "must-not-be-returned",
+                    }
+                },
+            },
+        )
+
+    app.state.tiktok.transport = httpx.MockTransport(provider)
+    response = client.get("/api/profile")
+    assert response.status_code == 200
+    assert response.json() == {"display_name": "Fixture Creator", "avatar_url": avatar}
+    assert response.headers["cache-control"] == "no-store"
+    assert "fixture-open-id" not in response.text
+    assert "fixture-access-token" not in response.text
+    assert "must-not-be-returned" not in response.text
+    assert observed == [
+        ("GET", "/v2/user/info/", "open_id,avatar_url,display_name"),
+    ]
+
+
+def test_profile_requires_user_info_basic_even_when_video_scope_is_granted(tmp_path):
+    app, client = connected_profile_client(tmp_path, scopes="video.publish,video.upload")
+
+    async def unexpected_request(request):
+        raise AssertionError("Profile endpoint should reject missing scope before reaching TikTok")
+
+    app.state.tiktok.transport = httpx.MockTransport(unexpected_request)
+    response = client.get("/api/profile")
+    assert response.status_code == 403
+
+
+def test_profile_rejects_mismatched_tiktok_identity(tmp_path):
+    app, client = connected_profile_client(tmp_path)
+
+    async def provider(request):
+        return httpx.Response(
+            200,
+            json={"error": {"code": "ok"}, "data": {"user": {"open_id": "someone-else", "display_name": "Other"}}},
+        )
+
+    app.state.tiktok.transport = httpx.MockTransport(provider)
+    response = client.get("/api/profile")
+    assert response.status_code == 502
+    assert "someone-else" not in response.text
+
+
+def test_profile_avatar_rejects_untrusted_image_urls():
+    assert safe_avatar_url("https://p16-sign.tiktokcdn-us.com/avatar.jpeg") == (
+        "https://p16-sign.tiktokcdn-us.com/avatar.jpeg"
+    )
+    for url in (
+        "http://p16-sign.tiktokcdn-us.com/avatar.jpeg",
+        "https://tiktokcdn-us.com.evil.example/avatar.jpeg",
+        "https://127.0.0.1/avatar.jpeg",
+        "https://user:password@p16-sign.tiktokcdn-us.com/avatar.jpeg",
+        "https://p16-sign.tiktokcdn-us.com:8080/avatar.jpeg",
+        "https://p16-sign.tiktokcdn-us.com/avatar.jpeg#fragment",
+    ):
+        assert safe_avatar_url(url) is None
+
+
+def test_dashboard_markup_and_scripts_have_matching_ids_and_decoded_separators():
+    web = Path(__file__).resolve().parent.parent / "web"
+    html = (web / "dashboard.html").read_text("utf-8")
+    javascript = (web / "dashboard.js").read_text("utf-8")
+    identifiers = set(re.findall(r'\bid="([^"]+)"', html))
+    references = set(re.findall(r'\$\("([a-z][a-z0-9-]+)"\)', javascript))
+    assert references <= identifiers, f"Missing dashboard elements: {references - identifiers}"
+    for required in ("profile", "profile-avatar", "profile-name", "profile-message"):
+        assert required in identifiers
+    assert "&middot;" in html
+    assert r"\u00b7" not in html
+    assert r"\u00b7" not in javascript
