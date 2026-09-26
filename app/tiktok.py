@@ -104,7 +104,8 @@ class TikTokClient:
             self.API + "/v2/user/info/?fields=open_id,avatar_url,display_name",
             token=access_token,
         )
-        user = payload.get("data", {}).get("user")
+        data = payload.get("data")
+        user = data.get("user") if isinstance(data, dict) else None
         if not isinstance(user, dict):
             raise HTTPException(502, "TikTok returned invalid basic profile data")
         return user
