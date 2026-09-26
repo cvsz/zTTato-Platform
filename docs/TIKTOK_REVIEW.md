@@ -29,3 +29,24 @@ TikTok states that unaudited clients' Direct Post content is restricted to priva
 
 ## Real creator UI
 Use /dashboard to perform the actual authenticated flow. /review-preview remains a deliberately non-posting mockup. The dashboard queries creator choices and requires a separate explicit consent checkbox. For unaudited clients only SELF_ONLY is selectable. Review commercial disclosure and AI-generated content controls against latest TikTok UX requirements and evidence before resubmission.
+
+
+## Basic profile and dashboard integrity
+
+The account header fetches `GET /api/profile` using the existing `user.info.basic` grant.
+The backend requests only `open_id,avatar_url,display_name` from TikTok User Info,
+matches the returned `open_id` to the linked account, and returns only the display name
+and a validated HTTPS TikTok CDN avatar URL to the browser. Tokens and internal IDs
+are never embedded in the page or sent to the browser.
+
+Profile loading and Content Posting creator-info loading are independent.
+`/api/creator-info` remains the source of current privacy and interaction settings
+for Direct Post and requires `video.publish`; a basic-profile success must not
+be taken as proof that publishing options were refreshed.
+
+The tracked `web/dashboard.html` is canonical for `/dashboard`. A previous
+live screenshot included Photo Post controls and literal `\\u00b7` separators,
+although those controls were absent from the tracked HTML at this commit.
+Before deploying, reconcile any server-local photo UI, commit its source
+and tests, and verify that the deployed HTML, JavaScript and container digest
+all come from the approved revision. Do not overwrite uncommitted live work.
