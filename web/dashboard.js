@@ -10,7 +10,10 @@
     PUBLIC_TO_EVERYONE:"Everyone", MUTUAL_FOLLOW_FRIENDS:"Friends (mutual follows)",
     FOLLOWER_OF_CREATOR:"Followers", SELF_ONLY:"Only me"
   };
-  const text = (id,message) => { $(id).textContent = message; };
+  const text = (id,message) => {
+    const element = $(id);
+    if (element) element.textContent = message;
+  };
   function csrf() {
     const item = document.cookie.split("; ").find(v => v.startsWith("zttato_csrf="));
     if (!item) throw new Error("Session expired. Reload the dashboard.");
@@ -33,19 +36,57 @@
     text("status",message);
     $("status").classList.toggle("error",isError);
   }
-  function mode() {return $("mode-direct").checked?"direct":"draft";}
+  function mode() {return $("mode-direct")?.checked?"direct":"draft";}
   function review() {
-    $("direct-options").classList.toggle("hidden",mode()!=="direct");
-    const ready=Boolean(mediaId)&&Boolean($("consent").checked)&&!sending;
-    $("publish").disabled=!ready || (mode()==="direct" && (!$("privacy").value || !account.scopes.includes("video.publish")));
+    $("direct-options")?.classList.toggle("hidden",mode()!=="direct");
+    const ready=Boolean(mediaId)&&Boolean($("consent")?.checked)&&!sending;
+    const publish=$("publish");
+    if (publish) {
+      publish.disabled=!ready || (mode()==="direct" &&
+        (!$("privacy")?.value || !account.scopes.includes("video.publish") ||
+         Boolean($("mode-direct")?.disabled)));
+    }
     text("summary",(mediaId?"A video is ready. ":"Upload an MP4 first. ")
        +(mode()==="draft"?"The video goes to your TikTok inbox, where you finish editing and posting."
        :"Direct Post will use the current TikTok visibility setting and any checked disclosures.")
        +" No transfer occurs until you confirm.");
   }
   function setCreatorFlag(id,disabled) {
-    $(id).checked=Boolean(disabled);
-    $(id).disabled=Boolean(disabled);
+    const control=$(id);
+    if (!control) throw new Error("Dashboard UI version mismatch; refresh this page.");
+    control.checked=Boolean(disabled);
+    control.disabled=Boolean(disabled);
+  }
+  async function loadProfile() {
+    const card=$("profile");
+    const avatar=$("profile-avatar");
+    if (!card) {
+      text("connection-details","Dashboard UI version mismatch. Refresh to load your TikTok profile.");
+      return;
+    }
+    card.classList.remove("hidden");
+    text("profile-name","Loading TikTok profile…");
+    if (!account.scopes.includes("user.info.basic")) {
+      text("profile-name","TikTok profile unavailable");
+      text("profile-message","Reconnect TikTok and grant user.info.basic.");
+      return;
+    }
+    try {
+      const profile=await api("/api/profile");
+      text("profile-name",profile.display_name||"TikTok creator");
+      text("profile-message","Basic profile retrieved from your authorized TikTok account.");
+      if (avatar && profile.avatar_url) {
+        avatar.onerror=()=>{
+          avatar.classList.add("hidden");
+          avatar.removeAttribute("src");
+        };
+        avatar.src=profile.avatar_url;
+        avatar.classList.remove("hidden");
+      }
+    } catch(err) {
+      text("profile-name","TikTok profile unavailable");
+      text("profile-message",err.message+" You can retry by refreshing the dashboard.");
+    }
   }
   async function loadCreator() {
     if (!account.scopes.includes("video.publish")) {
@@ -71,7 +112,7 @@
           +(info.max_video_post_duration_sec?" Max video duration: "+info.max_video_post_duration_sec+" seconds.":""));
       if (!choices.length) $("mode-direct").disabled=true;
     } catch(err) {
-      $("mode-direct").disabled=true;
+      if ($("mode-direct")) $("mode-direct").disabled=true;
       text("creator-message","Creator options unavailable: "+err.message);
     }
     review();
@@ -84,12 +125,13 @@
       text("connection-details",data.connected?"Granted scopes: "+data.scopes.join(", "):"Authorization uses the official TikTok consent page.");
       $("connect").classList.toggle("hidden",data.connected);
       $("disconnect").classList.toggle("hidden",!data.connected);
-      $("editor").classList.toggle("hidden",!data.connected);
+      $("editor")?.classList.toggle("hidden",!data.connected);
+      $("profile")?.classList.toggle("hidden",!data.connected);
       if (data.connected) {
         $("mode-draft").disabled=!data.scopes.includes("video.upload");
         $("mode-direct").disabled=!data.scopes.includes("video.publish");
         if ($("mode-draft").disabled&&!$("mode-direct").disabled) $("mode-direct").checked=true;
-        await loadCreator();
+        await Promise.all([loadProfile(),loadCreator()]);
       }
     } catch(err) {text("connection",err.message);}
     review();
