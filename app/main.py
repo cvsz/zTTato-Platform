@@ -1,6 +1,7 @@
 """zTTato API. All TikTok secrets stay server-side; a browser session is not a TikTok access token."""
 
 import html
+import json
 import os
 import secrets
 import time
@@ -77,6 +78,9 @@ class PublishInput(BaseModel):
     brand_content_toggle: bool = False
     brand_organic_toggle: bool = False
     is_aigc: bool = False
+    media_type: str = "video"
+    photo_images: list[str] | None = None
+    photo_cover_index: int | None = None
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -206,6 +210,48 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/tiktok/uploading/", include_in_schema=False)
     def tiktok_site_verification():
         return FileResponse(WEB / "tiktok-site-verification.txt", media_type="text/plain")
+
+    @app.get("/tiktok/uploading/tiktok9WurARgpbnJkdus0r4bfvSZydNYNxKUC.txt", include_in_schema=False)
+    def tiktok_site_verification_file():
+        return FileResponse(WEB / "tiktok-site-verification.txt", media_type="text/plain")
+
+    @app.get("/tiktok/uploading/tiktokL5nFtrSuDDcgIfFd8fOmSq9Olco5u3U2.txt", include_in_schema=False)
+    def tiktok_uploading_verification_file_2():
+        return FileResponse(WEB / "tiktokL5nFtrSuDDcgIfFd8fOmSq9Olco5u3U2.txt", media_type="text/plain")
+
+    @app.get("/tiktok/video/", include_in_schema=False)
+    def tiktok_video_verification():
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/video/tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", include_in_schema=False)
+    def tiktok_video_verification_file():
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokbBQcQDez1ePtWsIckfkAzIAZJYmk3W8P.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/tiktokexEbdyIAfLfQqONX57XBxjXQ8qX0VgqJ.txt", include_in_schema=False)
+    def tiktok_root_verification_file():
+        return FileResponse(WEB / "tiktok" / "tiktokexEbdyIAfLfQqONX57XBxjXQ8qX0VgqJ.txt", media_type="text/plain")
+
+    @app.get("/tiktok/uploading/tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", include_in_schema=False)
+    def tiktok_uploading_verification_file():
+        return FileResponse(
+            WEB / "tiktok" / "uploading" / "tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/video/tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", include_in_schema=False)
+    def tiktok_video_verification_file_ku5():
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokku5On4LTWSUV1cujWkpDjRbLsHJLY3qY.txt", media_type="text/plain"
+        )
+
+    @app.get("/tiktok/video/tiktokehTZH5bucSOvyOZ3q4JqwjWS4RHvJKpS.txt", include_in_schema=False)
+    def tiktok_video_verification_file_eh():
+        return FileResponse(
+            WEB / "tiktok" / "video" / "tiktokehTZH5bucSOvyOZ3q4JqwjWS4RHvJKpS.txt", media_type="text/plain"
+        )
 
     @app.get("/health/live")
     def live():
@@ -398,6 +444,38 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         session.commit()
         return {"media_id": item_id, "filename": asset.filename, "size": size}
 
+    @app.post("/api/media/photo")
+    async def add_photo_media(
+        request: Request,
+        payload: dict,
+        session: Session = Depends(db),
+        row: BrowserSession = Depends(current),
+    ):
+        require_csrf(request, row)
+        account(row, session)
+        photo_images = payload.get("photo_images", [])
+        photo_cover_index = payload.get("photo_cover_index", 0)
+        if not photo_images or not isinstance(photo_images, list):
+            raise HTTPException(422, "photo_images array is required")
+        if len(photo_images) > 35:
+            raise HTTPException(422, "Maximum 35 photos allowed")
+        if photo_cover_index < 0 or photo_cover_index >= len(photo_images):
+            raise HTTPException(422, "Invalid photo_cover_index")
+        for url in photo_images:
+            if not url.startswith("https://"):
+                raise HTTPException(422, "Photo URLs must use HTTPS")
+        item_id = str(uuid.uuid4())
+        asset = MediaAsset(
+            id=item_id,
+            session_id=row.id,
+            filename="photo_set.json",
+            size=len(json.dumps({"images": photo_images, "cover_index": photo_cover_index})),
+            path=json.dumps({"images": photo_images, "cover_index": photo_cover_index}),
+        )
+        session.add(asset)
+        session.commit()
+        return {"media_id": item_id, "filename": asset.filename, "size": asset.size}
+
     @app.post("/api/publish")
     async def publish(
         request: Request,
@@ -428,8 +506,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         media = session.scalar(
             select(MediaAsset).where(MediaAsset.id == payload.media_id, MediaAsset.session_id == row.id)
         )
-        if not media or not Path(media.path).is_file():
-            raise HTTPException(404, "Upload a video first")
+        if not media:
+            raise HTTPException(404, "Media not found")
+
+        # Parse photo media data if it's a photo set
+        is_photo = payload.media_type == "photo"
+        photo_data = None
+        if is_photo:
+            try:
+                photo_data = json.loads(media.path)
+            except (json.JSONDecodeError, TypeError):
+                raise HTTPException(422, "Invalid photo media data")
+
         required_scope = "video.publish" if payload.mode == "direct" else "video.upload"
         linked = account(row, session, required_scope)
         token = await access(linked, session, client)
@@ -443,10 +531,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 raise HTTPException(422, "Unaudited clients must use SELF_ONLY")
             if creator.get("comment_disabled") and not payload.disable_comment:
                 raise HTTPException(422, "This creator has disabled comments")
-            if creator.get("duet_disabled") and not payload.disable_duet:
-                raise HTTPException(422, "This creator has disabled duets")
-            if creator.get("stitch_disabled") and not payload.disable_stitch:
-                raise HTTPException(422, "This creator has disabled stitches")
             privacy = payload.privacy
         job = PublishJob(
             id=str(uuid.uuid4()),
@@ -475,25 +559,46 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 }
             raise
         try:
-            publish_id, upload_url = await client.init_video(
-                token,
-                mode=payload.mode,
-                media_size=media.size,
-                caption=payload.caption,
-                privacy=privacy,
-                disable_comment=payload.disable_comment,
-                disable_duet=payload.disable_duet,
-                disable_stitch=payload.disable_stitch,
-                brand_content_toggle=payload.brand_content_toggle,
-                brand_organic_toggle=payload.brand_organic_toggle,
-                is_aigc=payload.is_aigc,
-            )
-            job.publish_id = publish_id
-            job.status = "TRANSFER_PENDING"
+            if is_photo:
+                if not photo_data:
+                    raise HTTPException(422, "Invalid photo media data")
+                publish_id, _ = await client.init_photo(
+                    token,
+                    mode=payload.mode,
+                    caption=payload.caption,
+                    privacy=privacy,
+                    disable_comment=payload.disable_comment,
+                    brand_content_toggle=payload.brand_content_toggle,
+                    brand_organic_toggle=payload.brand_organic_toggle,
+                    is_aigc=payload.is_aigc,
+                    photo_images=photo_data.get("images", []),
+                    photo_cover_index=photo_data.get("cover_index", 0),
+                )
+                job.publish_id = publish_id
+                job.status = "PROCESSING"
+            else:
+                if not media or not Path(media.path).is_file():
+                    raise HTTPException(404, "Upload a video first")
+                publish_id, upload_url = await client.init_video(
+                    token,
+                    mode=payload.mode,
+                    media_size=media.size,
+                    caption=payload.caption,
+                    privacy=privacy,
+                    disable_comment=payload.disable_comment,
+                    disable_duet=payload.disable_duet,
+                    disable_stitch=payload.disable_stitch,
+                    brand_content_toggle=payload.brand_content_toggle,
+                    brand_organic_toggle=payload.brand_organic_toggle,
+                    is_aigc=payload.is_aigc,
+                )
+                job.publish_id = publish_id
+                job.status = "TRANSFER_PENDING"
             session.commit()
-            await client.upload_video(upload_url, media.path, media.size)
-            job.status = "PROCESSING"
-            session.commit()
+            if not is_photo:
+                await client.upload_video(upload_url, media.path, media.size)
+                job.status = "PROCESSING"
+                session.commit()
         except Exception:
             job.status = "RECONCILIATION_REQUIRED" if job.publish_id else "INITIATION_FAILED"
             session.commit()

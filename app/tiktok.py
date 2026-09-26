@@ -130,6 +130,8 @@ class TikTokClient:
         brand_content_toggle: bool = False,
         brand_organic_toggle: bool = False,
         is_aigc: bool = False,
+        transfer_method: str = "FILE_UPLOAD",
+        video_url: str | None = None,
     ) -> tuple[str, str]:
         if mode == "direct":
             endpoint = "/v2/post/publish/video/init/"
@@ -148,20 +150,81 @@ class TikTokClient:
             endpoint, request = "/v2/post/publish/inbox/video/init/", {}
         else:
             raise HTTPException(422, "Unsupported mode")
-        chunk_size, chunk_count = plan_video_chunks(media_size)
-        request["source_info"] = {
-            "source": "FILE_UPLOAD",
-            "video_size": media_size,
-            "chunk_size": chunk_size,
-            "total_chunk_count": chunk_count,
-        }
+        if transfer_method == "PULL_FROM_URL":
+            if not video_url:
+                raise HTTPException(422, "video_url is required for PULL_FROM_URL")
+            if not video_url.startswith("https://"):
+                raise HTTPException(422, "video_url must use HTTPS")
+            request["source_info"] = {
+                "source": "PULL_FROM_URL",
+                "video_url": video_url,
+            }
+        else:
+            chunk_size, chunk_count = plan_video_chunks(media_size)
+            request["source_info"] = {
+                "source": "FILE_UPLOAD",
+                "video_size": media_size,
+                "chunk_size": chunk_size,
+                "total_chunk_count": chunk_count,
+            }
         payload = await self._request("POST", self.API + endpoint, token=access_token, data=request)
         result = payload.get("data", {})
         publish_id, upload_url = result.get("publish_id"), result.get("upload_url")
-        if not isinstance(publish_id, str) or not isinstance(upload_url, str):
-            raise HTTPException(502, "TikTok did not provide upload details")
-        self.validate_upload_url(upload_url)
-        return publish_id, upload_url
+        if not isinstance(publish_id, str):
+            raise HTTPException(502, "TikTok did not provide publish ID")
+        if transfer_method == "FILE_UPLOAD":
+            if not isinstance(upload_url, str):
+                raise HTTPException(502, "TikTok did not provide upload URL")
+            self.validate_upload_url(upload_url)
+            return publish_id, upload_url
+        return publish_id, ""
+
+    async def init_photo(
+        self,
+        access_token: str,
+        *,
+        mode: str,
+        caption: str,
+        privacy: str | None,
+        disable_comment: bool,
+        brand_content_toggle: bool = False,
+        brand_organic_toggle: bool = False,
+        is_aigc: bool = False,
+        photo_images: list[str],
+        photo_cover_index: int,
+    ) -> tuple[str, str]:
+        if mode == "direct":
+            endpoint = "/v2/post/publish/content/init/"
+            post_info = {
+                "title": caption,
+                "privacy_level": privacy,
+                "disable_comment": disable_comment,
+                "brand_content_toggle": brand_content_toggle,
+                "brand_organic_toggle": brand_organic_toggle,
+                "is_aigc": is_aigc,
+            }
+        elif mode == "draft":
+            endpoint = "/v2/post/publish/content/init/"
+            post_info = {}
+        else:
+            raise HTTPException(422, "Unsupported mode")
+        source_info = {
+            "source": "PULL_FROM_URL",
+            "photo_images": photo_images,
+            "photo_cover_index": photo_cover_index,
+        }
+        request = {
+            "post_info": post_info,
+            "source_info": source_info,
+            "post_mode": "DIRECT_POST" if mode == "direct" else "MEDIA_UPLOAD",
+            "media_type": "PHOTO",
+        }
+        payload = await self._request("POST", self.API + endpoint, token=access_token, data=request)
+        result = payload.get("data", {})
+        publish_id = result.get("publish_id")
+        if not isinstance(publish_id, str):
+            raise HTTPException(502, "TikTok did not provide publish ID")
+        return publish_id, ""
 
     @staticmethod
     def validate_upload_url(url: str) -> None:
