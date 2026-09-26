@@ -24,15 +24,16 @@ class I18n {
    * Load translations for a locale
    */
   async loadTranslations(locale) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     try {
-      const response = await fetch(`/i18n/${locale}.json`);
+      const response = await fetch(`/i18n/${locale}.json`, { signal: controller.signal });
       if (response.ok) {
         this.translations = await response.json();
         this.locale = locale;
         this.notifyListeners();
       } else {
         console.warn(`Failed to load translations for ${locale}`);
-        // Fallback to English
         if (locale !== 'en') {
           await this.loadTranslations('en');
         }
@@ -42,6 +43,8 @@ class I18n {
       if (locale !== 'en') {
         await this.loadTranslations('en');
       }
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 

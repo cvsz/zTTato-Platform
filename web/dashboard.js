@@ -262,8 +262,12 @@
 
   async function boot() {
     try {
-      // Initialize i18n
-      await i18n.init();
+      // Initialize i18n (non-blocking, with fallback)
+      try {
+        await i18n.init();
+      } catch (i18nErr) {
+        console.warn('i18n init failed, continuing without translations:', i18nErr);
+      }
       // Apply translations to static elements
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -281,12 +285,10 @@
         langSelect.value = i18n.getLocale();
         langSelect.addEventListener('change', async (e) => {
           await i18n.setLocale(e.target.value);
-          // Reload page to apply translations
           location.reload();
         });
       }
 
-      try {
       const data = await api("/api/session");
       Object.assign(account, data);
 
